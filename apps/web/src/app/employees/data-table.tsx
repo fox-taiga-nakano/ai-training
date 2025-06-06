@@ -2,6 +2,9 @@
 
 import * as React from 'react';
 
+import Link from 'next/link';
+
+import { Button } from '@repo/components/button';
 import { Input } from '@repo/ui/components/input';
 import {
   Table,
@@ -78,13 +81,17 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
+      <div className="flex items-center justify-between py-4">
         <Input
           placeholder="名前で検索..."
           value={globalFilter}
           onChange={(event) => setGlobalFilter(event.target.value)}
           className="max-w-sm"
         />
+
+        <Button asChild>
+          <Link href="/employees/create">新規登録</Link>
+        </Button>
       </div>
       <div className="rounded-md border">
         <Table>

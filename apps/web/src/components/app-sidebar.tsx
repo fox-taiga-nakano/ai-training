@@ -62,6 +62,10 @@ export const data = {
           url: '/employees',
         },
         {
+          title: '社員登録',
+          url: '/employees/create',
+        },
+        {
           title: '部署管理',
           url: '/employees/departments',
         },
