@@ -90,7 +90,11 @@ export function DataTable<TData, TValue>({
   React.useEffect(() => {
     const selectedCount = Object.keys(rowSelection).length;
     if (selectedCount > 0) {
-      console.log('✅ DataTable - 選択された行数:', selectedCount, rowSelection);
+      console.log(
+        '✅ DataTable - 選択された行数:',
+        selectedCount,
+        rowSelection
+      );
     }
   }, [rowSelection]);
 
@@ -127,11 +131,11 @@ export function DataTable<TData, TValue>({
     const paginationState = table.getState().pagination;
 
     console.log('📋 DataTable - テーブル状態:', {
-      '総行数': rowModel.rows.length,
-      'フィルター後行数': filteredRowModel.rows.length,
-      '現在のページ': paginationState.pageIndex + 1,
-      'ページサイズ': paginationState.pageSize,
-      '総ページ数': table.getPageCount(),
+      総行数: rowModel.rows.length,
+      フィルター後行数: filteredRowModel.rows.length,
+      現在のページ: paginationState.pageIndex + 1,
+      ページサイズ: paginationState.pageSize,
+      総ページ数: table.getPageCount(),
     });
   }, [table, globalFilter, columnFilters, sorting]);
 
@@ -147,7 +151,7 @@ export function DataTable<TData, TValue>({
             console.log('🔎 DataTable - 検索前の状態:', {
               currentFilter: globalFilter,
               newValue: value,
-              dataLength: data.length
+              dataLength: data.length,
             });
             setGlobalFilter(value);
           }}
@@ -180,10 +184,10 @@ export function DataTable<TData, TValue>({
             {(() => {
               const rows = table.getRowModel().rows;
               console.log('📊 DataTable - TableBody レンダリング:', {
-                'レンダリング対象行数': rows.length,
-                '全体の行数': table.getCoreRowModel().rows.length,
-                '検索クエリ': globalFilter,
-                'フィルター適用中': columnFilters.length > 0,
+                レンダリング対象行数: rows.length,
+                全体の行数: table.getCoreRowModel().rows.length,
+                検索クエリ: globalFilter,
+                フィルター適用中: columnFilters.length > 0,
               });
               return rows.length > 0 ? (
                 rows.map((row) => (
@@ -193,7 +197,10 @@ export function DataTable<TData, TValue>({
                     onClick={() => {
                       console.log('👆 DataTable - 行クリック:', row.original);
                       console.log('👆 DataTable - 行ID:', row.id);
-                      console.log('👆 DataTable - 選択状態:', row.getIsSelected());
+                      console.log(
+                        '👆 DataTable - 選択状態:',
+                        row.getIsSelected()
+                      );
                     }}
                   >
                     {row.getVisibleCells().map((cell) => (

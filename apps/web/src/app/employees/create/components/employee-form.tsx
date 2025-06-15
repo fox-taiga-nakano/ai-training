@@ -106,7 +106,7 @@ export function EmployeeForm({ onSuccess }: { onSuccess?: () => void }) {
           <div className="grid gap-2">
             <label
               htmlFor="department"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              className="text-foreground text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               部署
             </label>
@@ -134,7 +134,7 @@ export function EmployeeForm({ onSuccess }: { onSuccess?: () => void }) {
               </SelectContent>
             </Select>
             {form.formState.errors.department && (
-              <p className="text-sm text-red-500">
+              <p className="text-sm text-red-500 dark:text-red-400">
                 {form.formState.errors.department.message}
               </p>
             )}
@@ -143,7 +143,7 @@ export function EmployeeForm({ onSuccess }: { onSuccess?: () => void }) {
           <div className="grid gap-2">
             <label
               htmlFor="role"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              className="text-foreground text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               役職
             </label>
@@ -171,7 +171,7 @@ export function EmployeeForm({ onSuccess }: { onSuccess?: () => void }) {
               </SelectContent>
             </Select>
             {form.formState.errors.role && (
-              <p className="text-sm text-red-500">
+              <p className="text-sm text-red-500 dark:text-red-400">
                 {form.formState.errors.role.message}
               </p>
             )}
@@ -194,7 +194,7 @@ export function EmployeeForm({ onSuccess }: { onSuccess?: () => void }) {
             aria-invalid={!!form.formState.errors.name}
           />
           {form.formState.errors.name && (
-            <p className="text-sm text-red-500">
+            <p className="text-sm text-red-500 dark:text-red-400">
               {form.formState.errors.name.message}
             </p>
           )}
@@ -218,7 +218,7 @@ export function EmployeeForm({ onSuccess }: { onSuccess?: () => void }) {
             aria-invalid={!!form.formState.errors.email}
           />
           {form.formState.errors.email && (
-            <p className="text-sm text-red-500">
+            <p className="text-sm text-red-500 dark:text-red-400">
               {form.formState.errors.email.message}
             </p>
           )}
@@ -241,7 +241,7 @@ export function EmployeeForm({ onSuccess }: { onSuccess?: () => void }) {
             aria-invalid={!!form.formState.errors.phone}
           />
           {form.formState.errors.phone && (
-            <p className="text-sm text-red-500">
+            <p className="text-sm text-red-500 dark:text-red-400">
               {form.formState.errors.phone.message}
             </p>
           )}
