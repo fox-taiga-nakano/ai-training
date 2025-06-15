@@ -9,6 +9,7 @@ import {
 
 import { AppBreadcrumb } from '@/components/app-breadcrumb';
 import { AppSidebar } from '@/components/app-sidebar';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function Root({ children }: Readonly<PropsWithChildren>) {
   return (
@@ -23,6 +24,9 @@ export default function Root({ children }: Readonly<PropsWithChildren>) {
               className="mr-2 data-[orientation=vertical]:h-4"
             />
             <AppBreadcrumb />
+          </div>
+          <div className="ml-auto px-4">
+            <ThemeToggle />
           </div>
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</main>
