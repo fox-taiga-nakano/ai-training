@@ -15,14 +15,14 @@ import {
   SelectValue,
 } from '@repo/components/select';
 import { cn } from '@repo/lib/utils';
-import * as z from 'zod';
+import { z } from 'zod/v4';
 
 // 社員情報のバリデーションスキーマ
 const employeeFormSchema = z.object({
   name: z.string().min(1, {
     message: '名前は必須項目です',
   }),
-  email: z.string().email({
+  email: z.email({
     message: '有効なメールアドレスを入力してください',
   }),
   phone: z.string().min(1, {

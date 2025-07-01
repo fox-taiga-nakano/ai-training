@@ -1,4 +1,4 @@
-import * as z from 'zod';
+import { z } from 'zod/v4';
 
 // セキュリティ強化：入力値のサニタイゼーション用正規表現
 const SAFE_TEXT_REGEX =
@@ -40,7 +40,7 @@ export const emailValidator = z
 export const EmployeeStatus = z.enum(
   ['active', 'inactive', 'suspended', 'invited'],
   {
-    errorMap: () => ({ message: '無効なステータスです' }),
+    message: '無効なステータスです',
   }
 );
 
@@ -48,7 +48,7 @@ export const EmployeeStatus = z.enum(
 export const EmployeeRole = z.enum(
   ['admin', 'manager', 'cashier', 'superadmin'],
   {
-    errorMap: () => ({ message: '無効な役割です' }),
+    message: '無効な役割です',
   }
 );
 
@@ -73,7 +73,9 @@ export const editEmployeeFormSchema = z.object({
 // 新規作成用バリデーションスキーマ
 export const createEmployeeFormSchema = editEmployeeFormSchema
   .extend({
-    confirmEmail: z.string().email('有効なメールアドレスを入力してください'),
+    confirmEmail: z.email({
+      message: '有効なメールアドレスを入力してください',
+    }),
   })
   .refine((data) => data.email === data.confirmEmail, {
     message: 'メールアドレスが一致しません',
@@ -92,7 +94,7 @@ export const sanitizeValidationError = (
 ): Record<string, string> => {
   const errorMap: Record<string, string> = {};
 
-  error.errors.forEach((err) => {
+  error.issues.forEach((err: z.ZodIssue) => {
     const path = err.path.join('.');
     // エラーメッセージから潜在的な危険な文字を除去
     const sanitizedMessage = err.message.replace(/[<>"'&]/g, '');
