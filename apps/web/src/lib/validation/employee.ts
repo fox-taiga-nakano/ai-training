@@ -95,7 +95,7 @@ export const sanitizeValidationError = (
   error.errors.forEach((err) => {
     const path = err.path.join('.');
     // エラーメッセージから潜在的な危険な文字を除去
-    const sanitizedMessage = err.message.replace(/[<>\"'&]/g, '');
+    const sanitizedMessage = err.message.replace(/[<>"'&]/g, '');
     errorMap[path] = sanitizedMessage;
   });
 

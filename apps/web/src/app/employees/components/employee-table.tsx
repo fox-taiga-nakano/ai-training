@@ -15,7 +15,7 @@ import { EmployeeEditModal } from './employee-edit-modal';
 
 interface EmployeeTableProps {
   initialEmployees: Employee[];
-  columns: any[];
+  columns: unknown[];
 }
 
 /**
@@ -68,7 +68,7 @@ export function EmployeeTable({
       if (column.id === 'actions') {
         return {
           ...column,
-          cell: ({ row }: { row: any }) => (
+          cell: ({ row }: { row: { original: Employee } }) => (
             <div className="flex gap-2">
               <Button
                 variant="outline"

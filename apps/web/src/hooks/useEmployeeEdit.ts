@@ -35,7 +35,7 @@ export function useEmployeeEdit(
   const [error, setError] = useState<EmployeeEditError | null>(null);
 
   // セキュリティ：権限チェック（実際の環境では認証情報をチェック）
-  const checkEditPermission = useCallback((employee: Employee): boolean => {
+  const checkEditPermission = useCallback((_employee: Employee): boolean => {
     // 実際の環境では、現在のユーザーの権限をチェック
     // 例：管理者のみが特権管理者を編集可能
     // if (currentUser.role !== 'superadmin' && employee.role === 'superadmin') {

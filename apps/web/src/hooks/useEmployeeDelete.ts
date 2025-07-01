@@ -36,7 +36,7 @@ export function useEmployeeDelete(
   const [error, setError] = useState<EmployeeDeleteError | null>(null);
 
   // セキュリティ：削除権限チェック
-  const checkDeletePermission = useCallback((employee: Employee): boolean => {
+  const checkDeletePermission = useCallback((_employee: Employee): boolean => {
     // 実際の環境では、現在のユーザーの権限をチェック
     // 例：特権管理者は削除できない、自分自身は削除できない等
     // if (employee.role === 'superadmin') {

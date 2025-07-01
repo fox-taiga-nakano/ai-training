@@ -17,6 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### 共有パッケージ
 
 - `@repo/api` - 共有APIリソース（DTO、Entity等）
+- `@repo/database` - Prisma ORM データベース管理パッケージ
 - `@repo/ui` - 共有React UIコンポーネントライブラリ（shadcn/ui ベース）
 - `@repo/eslint-config` - ESLint設定
 - `@repo/jest-config` - Jest設定
@@ -34,8 +35,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### バックエンド構成
 
 - NestJS フレームワーク
-- 現在はメモリ内データストレージ（実際のDBなし）
+- Prisma ORM + PostgreSQL データベース
 - RESTful API エンドポイント
+- 社員管理・部署管理 API
 
 ## 開発コマンド
 
@@ -85,6 +87,17 @@ pnpm check-types    # TypeScript型チェック（Webアプリケーション）
 pnpm tsc            # 全プロジェクトの型チェック
 ```
 
+### データベース操作
+
+```bash
+pnpm db:generate    # Prisma Clientを生成
+pnpm db:push        # スキーマをデータベースにプッシュ（開発用）
+pnpm db:migrate     # マイグレーション実行（本番用）
+pnpm db:seed        # テストデータの投入
+pnpm db:studio      # Prisma Studio起動（データベースGUI）
+pnpm db:reset       # データベースリセット
+```
+
 ## コード規約
 
 ### UIコンポーネント
@@ -99,6 +112,14 @@ pnpm tsc            # 全プロジェクトの型チェック
 - NestJS の標準的なパターンに従う
 - DTO は `@repo/api` パッケージで共有
 - エンティティとDTOを明確に分離
+
+### データベース・APIデザイン
+
+- Prisma ORM を使用したデータアクセス
+- PostgreSQL データベース
+- 型安全なクエリ操作
+- マイグレーション管理
+- シード機能による初期データ投入
 
 ### 日本語対応
 
@@ -291,6 +312,54 @@ className={cn(
 5. **フォーム**: Zod × react-hook-form
 6. **品質管理**: エラー処理 → アクセシビリティ → テスト
 
+## データベース設定
+
+### 環境設定
+
+1. PostgreSQL データベースの起動
+
+```bash
+docker-compose up -d  # PostgreSQL コンテナ起動
+```
+
+2. 環境変数の設定
+
+```bash
+cp packages/database/.env.example packages/database/.env
+# DATABASE_URL を適切に設定
+```
+
+3. データベースの初期化
+
+```bash
+pnpm db:generate  # Prisma Client生成
+pnpm db:push      # スキーマをDBに適用
+pnpm db:seed      # 初期データ投入
+```
+
+### データベーススキーマ
+
+#### Employee モデル
+
+- `id`: String (cuid)
+- `name`: String
+- `email`: String (unique)
+- `phone`: String (optional)
+- `position`: String
+- `salary`: Int (optional)
+- `hireDate`: DateTime
+- `departmentId`: String (optional)
+- `status`: Status enum (ACTIVE/INACTIVE/PENDING)
+- `createdAt`/`updatedAt`: DateTime
+
+#### Department モデル
+
+- `id`: String (cuid)
+- `name`: String (unique)
+- `description`: String (optional)
+- `createdAt`/`updatedAt`: DateTime
+- `employees`: Employee[] (relation)
+
 ## 注意事項
 
 - **Node.js要件**: 20以上必須
@@ -298,3 +367,4 @@ className={cn(
 - **Huskyプリコミットフック**: 有効化済み（`pnpm prepare`で初期化）
 - **型エラー**: 作業完了前に必ず解決（`pnpm check-types`で確認）
 - **ESLintエラー**: ignoreでの回避禁止、根本的解決必須
+- **データベース**: 開発時はDocker Composeを使用してPostgreSQL起動
