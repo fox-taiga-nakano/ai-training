@@ -17,12 +17,17 @@ import {
   Frame,
   GalleryVerticalEnd,
   Map,
+  Package,
   PieChart,
   Settings2,
+  ShoppingBag,
   SquareTerminal,
+  Truck,
+  Users,
 } from 'lucide-react';
 
 import { NavMain } from '@/components/nav-main';
+import { NavProjects } from '@/components/nav-projects';
 import { NavUser } from '@/components/nav-user';
 import { TeamSwitcher } from '@/components/team-switcher';
 
@@ -35,149 +40,143 @@ export const data = {
   },
   teams: [
     {
-      name: 'Acme Inc',
+      name: 'ECサイト運営',
       logo: GalleryVerticalEnd,
-      plan: 'Enterprise',
+      plan: 'メインサイト',
     },
     {
-      name: 'Acme Corp.',
+      name: 'サブサイト',
       logo: AudioWaveform,
-      plan: 'Startup',
-    },
-    {
-      name: 'Evil Corp.',
-      logo: Command,
-      plan: 'Free',
+      plan: 'テスト環境',
     },
   ],
   navMain: [
     {
-      title: '社員管理',
-      url: '/employees',
+      title: 'ダッシュボード',
+      url: '/',
       icon: SquareTerminal,
       isActive: true,
+      items: [],
+    },
+    {
+      title: '商品管理',
+      url: '/products',
+      icon: Package,
+      isActive: false,
       items: [
         {
-          title: '社員一覧',
-          url: '/employees',
+          title: '商品一覧',
+          url: '/products',
         },
         {
-          title: '社員登録',
-          url: '/employees/create',
+          title: '商品登録',
+          url: '/products/create',
         },
         {
-          title: '部署管理',
-          url: '/employees/departments',
+          title: 'カテゴリ管理',
+          url: '/products/categories',
         },
         {
-          title: '権限設定',
-          url: '/employees/permissions',
+          title: 'サプライヤー管理',
+          url: '/products/suppliers',
         },
       ],
     },
     {
-      title: 'Playground',
-      url: '/playground',
-      icon: SquareTerminal,
-      isActive: true,
+      title: '注文管理',
+      url: '/orders',
+      icon: ShoppingBag,
+      isActive: false,
       items: [
         {
-          title: 'History',
-          url: '/playground/history',
+          title: '注文一覧',
+          url: '/orders',
         },
         {
-          title: 'Starred',
-          url: '/playground/starred',
+          title: '注文検索',
+          url: '/orders/search',
         },
         {
-          title: 'Settings',
-          url: '/playground/settings',
+          title: 'ステータス管理',
+          url: '/orders/status',
         },
       ],
     },
     {
-      title: 'Models',
-      url: '/models',
-      icon: Bot,
-      isActive: true,
+      title: '配送管理',
+      url: '/shipments',
+      icon: Truck,
+      isActive: false,
       items: [
         {
-          title: 'Genesis',
-          url: '/models/genesis',
+          title: '配送一覧',
+          url: '/shipments',
         },
         {
-          title: 'Explorer',
-          url: '/models/explorer',
+          title: '配送準備',
+          url: '/shipments/prepare',
         },
         {
-          title: 'Quantum',
-          url: '/models/quantum',
+          title: '追跡管理',
+          url: '/shipments/tracking',
         },
       ],
     },
     {
-      title: 'Documentation',
-      url: '/docs',
-      icon: BookOpen,
-      isActive: true,
+      title: '顧客管理',
+      url: '/customers',
+      icon: Users,
+      isActive: false,
       items: [
         {
-          title: 'Introduction',
-          url: '/docs/introduction',
+          title: '顧客一覧',
+          url: '/customers',
         },
         {
-          title: 'Get Started',
-          url: '/docs/get-started',
-        },
-        {
-          title: 'Tutorials',
-          url: '/docs/tutorials',
-        },
-        {
-          title: 'Changelog',
-          url: '/docs/changelog',
+          title: '注文履歴',
+          url: '/customers/orders',
         },
       ],
     },
     {
-      title: 'Settings',
+      title: '設定',
       url: '/settings',
       icon: Settings2,
-      isActive: true,
+      isActive: false,
       items: [
         {
-          title: 'General',
+          title: '一般設定',
           url: '/settings/general',
         },
         {
-          title: 'Team',
-          url: '/settings/team',
+          title: '支払い方法',
+          url: '/settings/payments',
         },
         {
-          title: 'Billing',
-          url: '/settings/billing',
+          title: '配送設定',
+          url: '/settings/delivery',
         },
         {
-          title: 'Limits',
-          url: '/settings/limits',
+          title: 'サイト管理',
+          url: '/settings/sites',
         },
       ],
     },
   ],
   projects: [
     {
-      name: 'Design Engineering',
-      url: '#',
-      icon: Frame,
-    },
-    {
-      name: 'Sales & Marketing',
-      url: '#',
+      name: '売上分析',
+      url: '/analytics',
       icon: PieChart,
     },
     {
-      name: 'Travel',
-      url: '#',
+      name: 'レポート',
+      url: '/reports',
+      icon: Frame,
+    },
+    {
+      name: '在庫管理',
+      url: '/inventory',
       icon: Map,
     },
   ],
@@ -191,7 +190,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        {/* <NavProjects projects={data.projects} /> */}
+        <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
