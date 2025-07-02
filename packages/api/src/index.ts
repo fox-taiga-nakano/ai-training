@@ -1,39 +1,19 @@
-import { CreateDepartmentDto } from 'departments/dto/create-department.dto';
-import { UpdateDepartmentDto } from 'departments/dto/update-department.dto';
-import { Department } from 'departments/entities/department.entity';
-import { CreateEmployeeDto } from 'employees/dto/create-employee.dto';
-import { UpdateEmployeeDto } from 'employees/dto/update-employee.dto';
-import { Employee } from 'employees/entities/employee.entity';
-import { CreateLinkDto } from 'links/dto/create-link.dto';
-import { UpdateLinkDto } from 'links/dto/update-link.dto';
-import { Link } from 'links/entities/link.entity';
+// Products
+export * from './products/entities/product.entity';
+export * from './products/dto/create-product.dto';
+export * from './products/dto/update-product.dto';
 
-export const links = {
-  dto: {
-    CreateLinkDto,
-    UpdateLinkDto,
-  },
-  entities: {
-    Link,
-  },
-};
+// Orders
+export * from './orders/entities/order.entity';
+export * from './orders/dto/create-order.dto';
+export * from './orders/dto/update-order.dto';
 
-export const employees = {
-  dto: {
-    CreateEmployeeDto,
-    UpdateEmployeeDto,
-  },
-  entities: {
-    Employee,
-  },
-};
+// Shipments
+export * from './shipments/entities/shipment.entity';
+export * from './shipments/dto/create-shipment.dto';
+export * from './shipments/dto/update-shipment.dto';
 
-export const departments = {
-  dto: {
-    CreateDepartmentDto,
-    UpdateDepartmentDto,
-  },
-  entities: {
-    Department,
-  },
-};
+// Users
+export * from './users/entities/user.entity';
+export * from './users/dto/create-user.dto';
+export * from './users/dto/update-user.dto';
