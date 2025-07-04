@@ -4,10 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateOrderDto } from '@repo/api/orders/dto/create-order.dto';
-import {
-  UpdateOrderDto,
-  UpdateOrderStatusDto,
-} from '@repo/api/orders/dto/update-order.dto';
+import { UpdateOrderStatusDto } from '@repo/api/orders/dto/update-order.dto';
 import { db } from '@repo/database';
 import type { Order, OrderStatus } from '@repo/database';
 
