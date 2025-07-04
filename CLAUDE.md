@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-このプロジェクトは、Turborepo を使用したフルスタック monorepo で、NestJS APIバックエンドと Next.js フロントエンドを含む社員管理システムです。
+このプロジェクトは、Turborepo を使用したフルスタック monorepo で、NestJS APIバックエンドと Next.js フロントエンドを含むEC通販システムです。
 
 ## アーキテクチャ
 
@@ -37,7 +37,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - NestJS フレームワーク
 - Prisma ORM + PostgreSQL データベース
 - RESTful API エンドポイント
-- 社員管理・部署管理 API
+- 注文管理・商品管理・ユーザー管理・決済・配送管理 API
 
 ## 開発コマンド
 
@@ -120,6 +120,7 @@ pnpm db:reset       # データベースリセット
 - 型安全なクエリ操作
 - マイグレーション管理
 - シード機能による初期データ投入
+- EC通販システムに特化したスキーマ設計
 
 ### 日本語対応
 
@@ -134,12 +135,25 @@ pnpm db:reset       # データベースリセット
 
 ## 主要機能
 
-### 社員管理
+### 注文管理
 
-- 社員一覧表示（データテーブル）
-- 社員新規登録フォーム
-- 部署管理
-- 権限管理
+- 注文一覧表示（データテーブル）
+- 注文詳細・編集フォーム
+- 注文ステータス管理
+- 決済・配送状況管理
+
+### 商品管理
+
+- 商品一覧表示（データテーブル）
+- 商品登録・編集フォーム
+- カテゴリ・サプライヤー管理
+- 在庫管理
+
+### ユーザー管理
+
+- ユーザー一覧表示
+- ユーザー情報管理
+- 注文履歴管理
 
 ### データテーブル機能
 
@@ -339,26 +353,142 @@ pnpm db:seed      # 初期データ投入
 
 ### データベーススキーマ
 
-#### Employee モデル
+#### 主要テーブル
 
-- `id`: String (cuid)
+##### Site（サイト）モデル
+
+- `id`: Int (自動増分)
+- `code`: String (unique)
 - `name`: String
+- `status`: SiteStatus enum (ACTIVE/INACTIVE)
+
+##### Shop（店舗）モデル
+
+- `id`: Int (自動増分)
+- `name`: String
+- `code`: String (unique)
+- `siteId`: Int
+
+##### User（ユーザー）モデル
+
+- `id`: Int (自動増分)
 - `email`: String (unique)
-- `phone`: String (optional)
-- `position`: String
-- `salary`: Int (optional)
-- `hireDate`: DateTime
-- `departmentId`: String (optional)
-- `status`: Status enum (ACTIVE/INACTIVE/PENDING)
-- `createdAt`/`updatedAt`: DateTime
+- `name`: String
 
-#### Department モデル
+##### Product（商品）モデル
 
-- `id`: String (cuid)
-- `name`: String (unique)
-- `description`: String (optional)
-- `createdAt`/`updatedAt`: DateTime
-- `employees`: Employee[] (relation)
+- `id`: Int (自動増分)
+- `code`: String (unique)
+- `name`: String
+- `categoryId`: Int
+- `supplierId`: Int
+- `retailPrice`: Int
+- `purchasePrice`: Int
+
+##### Category（カテゴリ）モデル
+
+- `id`: Int (自動増分)
+- `name`: String
+
+##### Supplier（サプライヤー）モデル
+
+- `id`: Int (自動増分)
+- `code`: String (unique)
+- `name`: String
+- `email`: String
+- `phoneNumber`: String
+
+##### Order（注文）モデル
+
+- `id`: Int (自動増分)
+- `orderNumber`: String (unique)
+- `totalAmount`: Decimal
+- `shippingFee`: Int
+- `orderStatus`: OrderStatus enum (PENDING/CONFIRMED/SHIPPED/COMPLETED/CANCELED)
+- `orderDate`: DateTime
+- `desiredArrivalDate`: DateTime (optional)
+
+##### OrderItem（注文明細）モデル
+
+- `id`: Int (自動増分)
+- `orderId`: Int
+- `productId`: Int
+- `quantity`: Int
+- `unitPrice`: Decimal
+
+##### PaymentInfo（決済情報）モデル
+
+- `id`: Int (自動増分)
+- `orderId`: Int
+- `paymentStatus`: PaymentStatus enum (UNPAID/AUTHORIZED/PAID/REFUNDED)
+- `paymentAmount`: Decimal
+- `transactionId`: String (optional)
+
+##### Shipment（配送）モデル
+
+- `id`: Int (自動増分)
+- `orderId`: Int
+- `trackingNumber`: String (optional)
+- `shippingStatus`: ShipmentStatus enum (PREPARING/IN_TRANSIT/DELIVERED/RETURNED)
+- `shippedAt`: DateTime (optional)
+
+#### 関連テーブル
+
+##### PaymentMethod（決済方法）モデル
+
+- `id`: Int (自動増分)
+- `name`: String
+- `code`: String (unique)
+- `active`: Boolean
+
+##### DeliveryMethod（配送方法）モデル
+
+- `id`: Int (自動増分)
+- `name`: String
+- `code`: String (unique)
+- `type`: DeliveryMethodType enum (STANDARD/EXPRESS/COOL/MAIL)
+
+##### DeliverySlot（配送時間帯）モデル
+
+- `id`: Int (自動増分)
+- `deliveryMethodId`: Int
+- `name`: String
+- `code`: String
+
+##### ShippingAddress（配送先住所）モデル
+
+- `id`: Int (自動増分)
+- `name`: String
+- `postalCode`: String
+- `prefecture`: String
+- `addressLine`: String
+
+##### PurchaseOrder（発注）モデル
+
+- `id`: Int (自動増分)
+- `orderId`: Int (optional)
+- `supplierId`: Int
+- `siteId`: Int
+- `purchaserId`: Int
+- `invoiceNo`: String
+- `orderDate`: DateTime
+- `expectedAt`: DateTime
+
+##### Receiving（入荷）モデル
+
+- `id`: Int (自動増分)
+- `purchaseOrderId`: Int
+- `siteId`: Int
+- `supplierId`: Int
+- `receivedAt`: DateTime
+- `status`: ReceivingStatus enum (PENDING/RECEIVED/INSPECTED)
+
+##### OrderStatusLog（注文ステータスログ）モデル
+
+- `id`: Int (自動増分)
+- `orderId`: Int
+- `status`: OrderStatus
+- `changedAt`: DateTime
 
 ## 注意事項
 

@@ -1,19 +1,20 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  Query,
+  Get,
+  Param,
   ParseIntPipe,
+  Patch,
+  Post,
+  Query,
 } from '@nestjs/common';
-import { OrdersService } from './orders.service';
 import { CreateOrderDto } from '@repo/api/orders/dto/create-order.dto';
 import { UpdateOrderStatusDto } from '@repo/api/orders/dto/update-order.dto';
 import { OrderStatus } from '@repo/api/orders/entities/order.entity';
 import type { Order } from '@repo/database';
+
+import { OrdersService } from './orders.service';
 
 @Controller('orders')
 export class OrdersController {
@@ -25,7 +26,10 @@ export class OrdersController {
   }
 
   @Get()
-  async findAll(@Query('status') status?: OrderStatus, @Query('userId') userId?: string): Promise<Order[]> {
+  async findAll(
+    @Query('status') status?: OrderStatus,
+    @Query('userId') userId?: string
+  ): Promise<Order[]> {
     if (status) {
       return this.ordersService.findByStatus(status);
     }
@@ -43,7 +47,7 @@ export class OrdersController {
   @Patch(':id/status')
   async updateStatus(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateStatusDto: UpdateOrderStatusDto,
+    @Body() updateStatusDto: UpdateOrderStatusDto
   ): Promise<Order> {
     return this.ordersService.updateStatus(id, updateStatusDto);
   }

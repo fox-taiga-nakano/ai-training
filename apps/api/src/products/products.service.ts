@@ -141,7 +141,10 @@ export class ProductsService {
     }
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto): Promise<Product> {
+  async update(
+    id: number,
+    updateProductDto: UpdateProductDto
+  ): Promise<Product> {
     try {
       const existingProduct = await db.product.findUnique({
         where: { id },

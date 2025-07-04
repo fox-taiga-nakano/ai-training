@@ -1,6 +1,12 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
-import { Button } from '@repo/ui/components/button';
 import { Badge } from '@repo/ui/components/badge';
+import { Button } from '@repo/ui/components/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@repo/ui/components/card';
 import { Input } from '@repo/ui/components/input';
 import { Package, Plus, Search } from 'lucide-react';
 
@@ -65,23 +71,23 @@ export default function ProductsPage() {
       </div>
 
       <div className="flex items-center space-x-2">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+        <div className="relative max-w-sm flex-1">
+          <Search className="text-muted-foreground absolute left-2 top-2.5 h-4 w-4" />
           <Input placeholder="商品を検索..." className="pl-8" />
         </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {products.map((product) => (
-          <Card key={product.id} className="hover:shadow-md transition-shadow">
+          <Card key={product.id} className="transition-shadow hover:shadow-md">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg">{product.name}</CardTitle>
-                <Badge 
-                  variant={product.stock < 10 ? "destructive" : "default"}
+                <Badge
+                  variant={product.stock < 10 ? 'destructive' : 'default'}
                   className="ml-2"
                 >
-                  {product.stock < 10 ? "在庫少" : "在庫あり"}
+                  {product.stock < 10 ? '在庫少' : '在庫あり'}
                 </Badge>
               </div>
               <CardDescription>
@@ -94,24 +100,38 @@ export default function ProductsPage() {
             <CardContent>
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">カテゴリ</span>
+                  <span className="text-muted-foreground text-sm">
+                    カテゴリ
+                  </span>
                   <span className="text-sm">{product.category}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">サプライヤー</span>
+                  <span className="text-muted-foreground text-sm">
+                    サプライヤー
+                  </span>
                   <span className="text-sm">{product.supplier}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">販売価格</span>
-                  <span className="text-sm font-medium">¥{product.retailPrice.toLocaleString()}</span>
+                  <span className="text-muted-foreground text-sm">
+                    販売価格
+                  </span>
+                  <span className="text-sm font-medium">
+                    ¥{product.retailPrice.toLocaleString()}
+                  </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">仕入価格</span>
-                  <span className="text-sm">¥{product.purchasePrice.toLocaleString()}</span>
+                  <span className="text-muted-foreground text-sm">
+                    仕入価格
+                  </span>
+                  <span className="text-sm">
+                    ¥{product.purchasePrice.toLocaleString()}
+                  </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-muted-foreground">在庫数</span>
-                  <span className={`text-sm font-medium ${product.stock < 10 ? 'text-red-600' : ''}`}>
+                  <span className="text-muted-foreground text-sm">在庫数</span>
+                  <span
+                    className={`text-sm font-medium ${product.stock < 10 ? 'text-red-600' : ''}`}
+                  >
                     {product.stock}個
                   </span>
                 </div>
@@ -134,13 +154,15 @@ export default function ProductsPage() {
           <CardContent>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">総商品数</span>
+                <span className="text-muted-foreground text-sm">総商品数</span>
                 <span className="text-sm font-medium">{products.length}点</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">在庫アラート</span>
+                <span className="text-muted-foreground text-sm">
+                  在庫アラート
+                </span>
                 <span className="text-sm font-medium text-red-600">
-                  {products.filter(p => p.stock < 10).length}点
+                  {products.filter((p) => p.stock < 10).length}点
                 </span>
               </div>
             </div>
@@ -154,15 +176,15 @@ export default function ProductsPage() {
           <CardContent>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">電子機器</span>
+                <span className="text-muted-foreground text-sm">電子機器</span>
                 <span className="text-sm font-medium">2点</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">食品</span>
+                <span className="text-muted-foreground text-sm">食品</span>
                 <span className="text-sm font-medium">1点</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">衣類</span>
+                <span className="text-muted-foreground text-sm">衣類</span>
                 <span className="text-sm font-medium">1点</span>
               </div>
             </div>

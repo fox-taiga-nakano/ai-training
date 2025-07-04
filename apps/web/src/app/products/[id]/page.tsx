@@ -1,8 +1,15 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
-import { Button } from '@repo/ui/components/button';
-import { Badge } from '@repo/ui/components/badge';
-import { ArrowLeft, Edit, Package, Trash2 } from 'lucide-react';
 import Link from 'next/link';
+
+import { Badge } from '@repo/ui/components/badge';
+import { Button } from '@repo/ui/components/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@repo/ui/components/card';
+import { ArrowLeft, Edit, Package, Trash2 } from 'lucide-react';
 
 interface ProductDetailPageProps {
   params: Promise<{ id: string }>;
@@ -20,16 +27,19 @@ const getProduct = (id: string) => {
       retailPrice: 89800,
       purchasePrice: 65000,
       stock: 2,
-      description: '最新のスマートフォン。高性能なプロセッサと長時間バッテリーを搭載。',
+      description:
+        '最新のスマートフォン。高性能なプロセッサと長時間バッテリーを搭載。',
       createdAt: '2024-01-10',
       updatedAt: '2024-01-15',
     },
   ];
-  
-  return products.find(p => p.id === parseInt(id));
+
+  return products.find((p) => p.id === parseInt(id));
 };
 
-export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
+export default async function ProductDetailPage({
+  params,
+}: ProductDetailPageProps) {
   const { id } = await params;
   const product = getProduct(id);
 
@@ -44,9 +54,11 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             </Button>
           </Link>
         </div>
-        <div className="text-center py-8">
+        <div className="py-8 text-center">
           <h2 className="text-2xl font-bold">商品が見つかりません</h2>
-          <p className="text-muted-foreground mt-2">指定された商品は存在しません。</p>
+          <p className="text-muted-foreground mt-2">
+            指定された商品は存在しません。
+          </p>
         </div>
       </div>
     );
@@ -80,10 +92,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="text-2xl">{product.name}</CardTitle>
-              <Badge 
-                variant={product.stock < 10 ? "destructive" : "default"}
-              >
-                {product.stock < 10 ? "在庫少" : "在庫あり"}
+              <Badge variant={product.stock < 10 ? 'destructive' : 'default'}>
+                {product.stock < 10 ? '在庫少' : '在庫あり'}
               </Badge>
             </div>
             <CardDescription>
@@ -96,19 +106,23 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           <CardContent>
             <div className="space-y-4">
               <div>
-                <h3 className="font-semibold mb-2">商品説明</h3>
-                <p className="text-sm text-muted-foreground">
+                <h3 className="mb-2 font-semibold">商品説明</h3>
+                <p className="text-muted-foreground text-sm">
                   {product.description}
                 </p>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <h4 className="font-medium text-sm text-muted-foreground">カテゴリ</h4>
+                  <h4 className="text-muted-foreground text-sm font-medium">
+                    カテゴリ
+                  </h4>
                   <p className="font-medium">{product.category}</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-sm text-muted-foreground">サプライヤー</h4>
+                  <h4 className="text-muted-foreground text-sm font-medium">
+                    サプライヤー
+                  </h4>
                   <p className="font-medium">{product.supplier}</p>
                 </div>
               </div>
@@ -123,39 +137,57 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           <CardContent>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 border rounded-lg">
-                  <h4 className="font-medium text-sm text-muted-foreground">販売価格</h4>
+                <div className="rounded-lg border p-4">
+                  <h4 className="text-muted-foreground text-sm font-medium">
+                    販売価格
+                  </h4>
                   <p className="text-2xl font-bold text-green-600">
                     ¥{product.retailPrice.toLocaleString()}
                   </p>
                 </div>
-                <div className="p-4 border rounded-lg">
-                  <h4 className="font-medium text-sm text-muted-foreground">仕入価格</h4>
+                <div className="rounded-lg border p-4">
+                  <h4 className="text-muted-foreground text-sm font-medium">
+                    仕入価格
+                  </h4>
                   <p className="text-2xl font-bold">
                     ¥{product.purchasePrice.toLocaleString()}
                   </p>
                 </div>
               </div>
-              
-              <div className="p-4 border rounded-lg">
-                <h4 className="font-medium text-sm text-muted-foreground">現在在庫</h4>
-                <p className={`text-3xl font-bold ${product.stock < 10 ? 'text-red-600' : 'text-blue-600'}`}>
+
+              <div className="rounded-lg border p-4">
+                <h4 className="text-muted-foreground text-sm font-medium">
+                  現在在庫
+                </h4>
+                <p
+                  className={`text-3xl font-bold ${product.stock < 10 ? 'text-red-600' : 'text-blue-600'}`}
+                >
                   {product.stock}個
                 </p>
                 {product.stock < 10 && (
-                  <p className="text-sm text-red-600 mt-1">
+                  <p className="mt-1 text-sm text-red-600">
                     在庫が少なくなっています
                   </p>
                 )}
               </div>
 
-              <div className="p-4 bg-muted rounded-lg">
-                <h4 className="font-medium text-sm text-muted-foreground mb-2">利益率</h4>
+              <div className="bg-muted rounded-lg p-4">
+                <h4 className="text-muted-foreground mb-2 text-sm font-medium">
+                  利益率
+                </h4>
                 <p className="text-lg font-bold">
-                  {(((product.retailPrice - product.purchasePrice) / product.retailPrice) * 100).toFixed(1)}%
+                  {(
+                    ((product.retailPrice - product.purchasePrice) /
+                      product.retailPrice) *
+                    100
+                  ).toFixed(1)}
+                  %
                 </p>
-                <p className="text-sm text-muted-foreground">
-                  利益: ¥{(product.retailPrice - product.purchasePrice).toLocaleString()}
+                <p className="text-muted-foreground text-sm">
+                  利益: ¥
+                  {(
+                    product.retailPrice - product.purchasePrice
+                  ).toLocaleString()}
                 </p>
               </div>
             </div>
@@ -170,16 +202,22 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">2024/01/15</span>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground text-sm">
+                  2024/01/15
+                </span>
                 <span className="text-sm">入荷 +10個</span>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">2024/01/14</span>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground text-sm">
+                  2024/01/14
+                </span>
                 <span className="text-sm">販売 -5個</span>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">2024/01/13</span>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground text-sm">
+                  2024/01/13
+                </span>
                 <span className="text-sm">販売 -3個</span>
               </div>
             </div>
@@ -193,15 +231,21 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           <CardContent>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">今月の販売</span>
+                <span className="text-muted-foreground text-sm">
+                  今月の販売
+                </span>
                 <span className="text-sm font-medium">8個</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">先月の販売</span>
+                <span className="text-muted-foreground text-sm">
+                  先月の販売
+                </span>
                 <span className="text-sm font-medium">12個</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">平均販売/月</span>
+                <span className="text-muted-foreground text-sm">
+                  平均販売/月
+                </span>
                 <span className="text-sm font-medium">10個</span>
               </div>
             </div>
@@ -215,11 +259,11 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           <CardContent>
             <div className="space-y-2">
               <div>
-                <span className="text-sm text-muted-foreground">作成日</span>
+                <span className="text-muted-foreground text-sm">作成日</span>
                 <p className="text-sm font-medium">{product.createdAt}</p>
               </div>
               <div>
-                <span className="text-sm text-muted-foreground">最終更新</span>
+                <span className="text-muted-foreground text-sm">最終更新</span>
                 <p className="text-sm font-medium">{product.updatedAt}</p>
               </div>
             </div>

@@ -1,10 +1,13 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
-  BadRequestException,
 } from '@nestjs/common';
 import { CreateOrderDto } from '@repo/api/orders/dto/create-order.dto';
-import { UpdateOrderDto, UpdateOrderStatusDto } from '@repo/api/orders/dto/update-order.dto';
+import {
+  UpdateOrderDto,
+  UpdateOrderStatusDto,
+} from '@repo/api/orders/dto/update-order.dto';
 import { db } from '@repo/database';
 import type { Order, OrderStatus } from '@repo/database';
 
@@ -83,7 +86,9 @@ export class OrdersService {
           });
 
           if (!product) {
-            throw new NotFoundException(`商品ID ${item.productId} が見つかりません`);
+            throw new NotFoundException(
+              `商品ID ${item.productId} が見つかりません`
+            );
           }
 
           await tx.orderItem.create({
@@ -256,7 +261,10 @@ export class OrdersService {
     }
   }
 
-  async updateStatus(id: number, updateStatusDto: UpdateOrderStatusDto): Promise<Order> {
+  async updateStatus(
+    id: number,
+    updateStatusDto: UpdateOrderStatusDto
+  ): Promise<Order> {
     try {
       const existingOrder = await db.order.findUnique({
         where: { id },
@@ -266,8 +274,13 @@ export class OrdersService {
         throw new NotFoundException('注文が見つかりません');
       }
 
-      if (existingOrder.orderStatus === 'COMPLETED' || existingOrder.orderStatus === 'CANCELED') {
-        throw new BadRequestException('完了またはキャンセル済みの注文は変更できません');
+      if (
+        existingOrder.orderStatus === 'COMPLETED' ||
+        existingOrder.orderStatus === 'CANCELED'
+      ) {
+        throw new BadRequestException(
+          '完了またはキャンセル済みの注文は変更できません'
+        );
       }
 
       return await db.$transaction(async (tx) => {
@@ -342,7 +355,7 @@ export class OrdersService {
     const month = (now.getMonth() + 1).toString().padStart(2, '0');
     const day = now.getDate().toString().padStart(2, '0');
     const timestamp = now.getTime().toString().slice(-6);
-    
+
     return `ORD${year}${month}${day}${timestamp}`;
   }
 }

@@ -8,7 +8,7 @@ export class Shipment {
   trackingNumber?: string;
   shippedAt?: Date;
   shippingStatus: ShipmentStatus;
-  
+
   order: Order;
   site: Site;
   shop: Shop;
@@ -28,7 +28,7 @@ export enum ShipmentStatus {
   PREPARING = 'PREPARING',
   IN_TRANSIT = 'IN_TRANSIT',
   DELIVERED = 'DELIVERED',
-  RETURNED = 'RETURNED'
+  RETURNED = 'RETURNED',
 }
 
 export class Order {

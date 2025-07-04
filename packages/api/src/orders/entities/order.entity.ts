@@ -17,7 +17,7 @@ export class Order {
   memo?: string;
   createdAt: Date;
   updatedAt: Date;
-  
+
   site: Site;
   shop: Shop;
   user: User;
@@ -39,7 +39,7 @@ export class OrderItem {
   quantity: number;
   unitPrice: number;
   memo?: string;
-  
+
   order: Order;
   product: Product;
   category: Category;
@@ -53,7 +53,7 @@ export class PaymentInfo {
   paymentAmount: number;
   paymentDate?: Date;
   transactionId?: string;
-  
+
   order: Order;
   site: Site;
 }
@@ -68,7 +68,7 @@ export class Shipment {
   trackingNumber?: string;
   shippedAt?: Date;
   shippingStatus: ShipmentStatus;
-  
+
   order: Order;
   site: Site;
   shop: Shop;
@@ -81,21 +81,21 @@ export enum OrderStatus {
   CONFIRMED = 'CONFIRMED',
   SHIPPED = 'SHIPPED',
   COMPLETED = 'COMPLETED',
-  CANCELED = 'CANCELED'
+  CANCELED = 'CANCELED',
 }
 
 export enum PaymentStatus {
   UNPAID = 'UNPAID',
   AUTHORIZED = 'AUTHORIZED',
   PAID = 'PAID',
-  REFUNDED = 'REFUNDED'
+  REFUNDED = 'REFUNDED',
 }
 
 export enum ShipmentStatus {
   PREPARING = 'PREPARING',
   IN_TRANSIT = 'IN_TRANSIT',
   DELIVERED = 'DELIVERED',
-  RETURNED = 'RETURNED'
+  RETURNED = 'RETURNED',
 }
 
 export class Site {
@@ -110,7 +110,7 @@ export class Shop {
   name: string;
   code: string;
   siteId: number;
-  
+
   site: Site;
 }
 
@@ -139,7 +139,7 @@ export class DeliverySlot {
   deliveryMethodId: number;
   name: string;
   code: string;
-  
+
   deliveryMethod: DeliveryMethod;
 }
 
@@ -168,12 +168,12 @@ export class Category {
 
 export enum SiteStatus {
   ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE'
+  INACTIVE = 'INACTIVE',
 }
 
 export enum DeliveryMethodType {
   STANDARD = 'STANDARD',
   EXPRESS = 'EXPRESS',
   COOL = 'COOL',
-  MAIL = 'MAIL'
+  MAIL = 'MAIL',
 }

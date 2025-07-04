@@ -1,6 +1,6 @@
-# 社員管理システム
+# EC通販システム
 
-NestJS API バックエンドと Next.js フロントエンドを含む Turborepo 構成のフルスタック社員管理システムです。
+NestJS API バックエンドと Next.js フロントエンドを含む Turborepo 構成のフルスタックEC通販システムです。
 
 ## 環境構築手順
 
@@ -114,8 +114,10 @@ pnpm lint --fix
 ### アプリケーション
 
 - **apps/api** - NestJS バックエンド API サーバー（ポート 3000）
-  - 社員管理 API エンドポイント
-  - 部署管理 API エンドポイント
+  - 注文管理 API エンドポイント
+  - 商品管理 API エンドポイント
+  - ユーザー管理 API エンドポイント
+  - 配送・決済管理 API エンドポイント
   - Prisma ORM を使用したデータベース操作
   - JWT 認証対応
 
@@ -149,12 +151,26 @@ pnpm lint --fix
 
 ### 主要機能
 
-#### 社員管理機能
+#### 注文管理機能
 
-- 社員一覧表示（データテーブル）
-- 社員情報の新規登録・編集・削除
-- 部署による分類管理
+- 注文一覧表示（データテーブル）
+- 注文情報の詳細表示・編集
+- 注文ステータス管理
+- 決済・配送情報管理
 - フィルタリング・ソート・ページネーション
+
+#### 商品管理機能
+
+- 商品一覧表示
+- 商品情報の新規登録・編集・削除
+- カテゴリ・サプライヤー管理
+- 在庫管理
+
+#### ユーザー管理機能
+
+- ユーザー一覧表示
+- ユーザー情報管理
+- 注文履歴管理
 
 #### データテーブル機能
 
@@ -202,26 +218,94 @@ pnpm lint --fix
 
 ## データベース構成
 
-### Employee（社員）モデル
+### 主要テーブル
 
-- `id`: 一意識別子（cuid）
-- `name`: 氏名
+#### Site（サイト）モデル
+
+- `id`: 一意識別子（自動増分）
+- `code`: サイトコード（ユニーク）
+- `name`: サイト名
+- `status`: ステータス（ACTIVE/INACTIVE）
+
+#### User（ユーザー）モデル
+
+- `id`: 一意識別子（自動増分）
 - `email`: メールアドレス（ユニーク）
-- `phone`: 電話番号（オプション）
-- `position`: 役職
-- `salary`: 給与（オプション）
-- `hireDate`: 入社日
-- `departmentId`: 部署ID（オプション）
-- `status`: ステータス（ACTIVE/INACTIVE/PENDING）
-- `createdAt`/`updatedAt`: 作成・更新日時
+- `name`: ユーザー名
 
-### Department（部署）モデル
+#### Product（商品）モデル
 
-- `id`: 一意識別子（cuid）
-- `name`: 部署名（ユニーク）
-- `description`: 説明（オプション）
-- `createdAt`/`updatedAt`: 作成・更新日時
-- `employees`: 所属社員一覧（リレーション）
+- `id`: 一意識別子（自動増分）
+- `code`: 商品コード（ユニーク）
+- `name`: 商品名
+- `categoryId`: カテゴリID
+- `supplierId`: サプライヤーID
+- `retailPrice`: 小売価格
+- `purchasePrice`: 仕入価格
+
+#### Order（注文）モデル
+
+- `id`: 一意識別子（自動増分）
+- `orderNumber`: 注文番号（ユニーク）
+- `totalAmount`: 合計金額
+- `shippingFee`: 送料
+- `orderStatus`: 注文ステータス（PENDING/CONFIRMED/SHIPPED/COMPLETED/CANCELED）
+- `orderDate`: 注文日
+- `desiredArrivalDate`: 希望到着日
+
+#### OrderItem（注文明細）モデル
+
+- `id`: 一意識別子（自動増分）
+- `orderId`: 注文ID
+- `productId`: 商品ID
+- `quantity`: 数量
+- `unitPrice`: 単価
+
+#### PaymentInfo（決済情報）モデル
+
+- `id`: 一意識別子（自動増分）
+- `orderId`: 注文ID
+- `paymentStatus`: 決済ステータス（UNPAID/AUTHORIZED/PAID/REFUNDED）
+- `paymentAmount`: 決済金額
+- `transactionId`: 取引ID
+
+#### Shipment（配送）モデル
+
+- `id`: 一意識別子（自動増分）
+- `orderId`: 注文ID
+- `trackingNumber`: 追跡番号
+- `shippingStatus`: 配送ステータス（PREPARING/IN_TRANSIT/DELIVERED/RETURNED）
+- `shippedAt`: 発送日時
+
+### 関連テーブル
+
+#### Category（カテゴリ）
+
+- 商品分類管理
+
+#### Supplier（サプライヤー）
+
+- 仕入先管理
+
+#### PaymentMethod（決済方法）
+
+- 決済手段管理
+
+#### DeliveryMethod（配送方法）
+
+- 配送手段管理
+
+#### ShippingAddress（配送先住所）
+
+- 配送先住所管理
+
+#### PurchaseOrder（発注）
+
+- 仕入発注管理
+
+#### Receiving（入荷）
+
+- 入荷管理
 
 ## 開発ガイドライン
 

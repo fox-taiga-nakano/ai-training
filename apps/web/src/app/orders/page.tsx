@@ -1,8 +1,14 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
-import { Button } from '@repo/ui/components/button';
 import { Badge } from '@repo/ui/components/badge';
+import { Button } from '@repo/ui/components/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@repo/ui/components/card';
 import { Input } from '@repo/ui/components/input';
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -38,22 +44,36 @@ const orders = [
     status: 'PENDING',
     orderDate: '2024-01-16T14:15:00Z',
     paymentStatus: 'UNPAID',
-    items: [
-      { name: 'ワイヤレスイヤホン', quantity: 1, unitPrice: 19800 },
-    ],
+    items: [{ name: 'ワイヤレスイヤホン', quantity: 1, unitPrice: 19800 }],
   },
 ];
 
 const getStatusBadge = (status: string) => {
   switch (status) {
     case 'PENDING':
-      return <Badge variant="outline" className="text-yellow-600 border-yellow-600">保留中</Badge>;
+      return (
+        <Badge variant="outline" className="border-yellow-600 text-yellow-600">
+          保留中
+        </Badge>
+      );
     case 'CONFIRMED':
-      return <Badge variant="outline" className="text-green-600 border-green-600">確認済み</Badge>;
+      return (
+        <Badge variant="outline" className="border-green-600 text-green-600">
+          確認済み
+        </Badge>
+      );
     case 'SHIPPED':
-      return <Badge variant="outline" className="text-blue-600 border-blue-600">発送済み</Badge>;
+      return (
+        <Badge variant="outline" className="border-blue-600 text-blue-600">
+          発送済み
+        </Badge>
+      );
     case 'COMPLETED':
-      return <Badge variant="outline" className="text-green-600 border-green-600">完了</Badge>;
+      return (
+        <Badge variant="outline" className="border-green-600 text-green-600">
+          完了
+        </Badge>
+      );
     case 'CANCELED':
       return <Badge variant="destructive">キャンセル</Badge>;
     default:
@@ -66,9 +86,17 @@ const getPaymentStatusBadge = (status: string) => {
     case 'UNPAID':
       return <Badge variant="destructive">未払い</Badge>;
     case 'PAID':
-      return <Badge variant="outline" className="text-green-600 border-green-600">支払済み</Badge>;
+      return (
+        <Badge variant="outline" className="border-green-600 text-green-600">
+          支払済み
+        </Badge>
+      );
     case 'REFUNDED':
-      return <Badge variant="outline" className="text-orange-600 border-orange-600">返金済み</Badge>;
+      return (
+        <Badge variant="outline" className="border-orange-600 text-orange-600">
+          返金済み
+        </Badge>
+      );
     default:
       return <Badge variant="outline">{status}</Badge>;
   }
@@ -87,8 +115,8 @@ export default function OrdersPage() {
       </div>
 
       <div className="flex items-center space-x-2">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+        <div className="relative max-w-sm flex-1">
+          <Search className="text-muted-foreground absolute left-2 top-2.5 h-4 w-4" />
           <Input placeholder="注文番号で検索..." className="pl-8" />
         </div>
         <Select>
@@ -119,7 +147,7 @@ export default function OrdersPage() {
 
       <div className="grid gap-4">
         {orders.map((order) => (
-          <Card key={order.id} className="hover:shadow-md transition-shadow">
+          <Card key={order.id} className="transition-shadow hover:shadow-md">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
@@ -130,7 +158,8 @@ export default function OrdersPage() {
                     </div>
                   </CardTitle>
                   <CardDescription className="mt-1">
-                    注文日時: {new Date(order.orderDate).toLocaleString('ja-JP')}
+                    注文日時:{' '}
+                    {new Date(order.orderDate).toLocaleString('ja-JP')}
                   </CardDescription>
                 </div>
                 <div className="flex items-center gap-2">
@@ -140,15 +169,21 @@ export default function OrdersPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <div>
-                  <h4 className="font-medium text-sm text-muted-foreground">顧客情報</h4>
+                  <h4 className="text-muted-foreground text-sm font-medium">
+                    顧客情報
+                  </h4>
                   <p className="font-medium">{order.customerName}</p>
-                  <p className="text-sm text-muted-foreground">{order.customerEmail}</p>
+                  <p className="text-muted-foreground text-sm">
+                    {order.customerEmail}
+                  </p>
                 </div>
-                
+
                 <div>
-                  <h4 className="font-medium text-sm text-muted-foreground">注文内容</h4>
+                  <h4 className="text-muted-foreground text-sm font-medium">
+                    注文内容
+                  </h4>
                   <div className="space-y-1">
                     {order.items.map((item, index) => (
                       <p key={index} className="text-sm">
@@ -157,17 +192,19 @@ export default function OrdersPage() {
                     ))}
                   </div>
                 </div>
-                
+
                 <div>
-                  <h4 className="font-medium text-sm text-muted-foreground">金額</h4>
+                  <h4 className="text-muted-foreground text-sm font-medium">
+                    金額
+                  </h4>
                   <p className="font-medium">
                     合計: ¥{order.totalAmount.toLocaleString()}
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     請求: ¥{order.billingAmount.toLocaleString()}
                   </p>
                 </div>
-                
+
                 <div className="flex items-end">
                   <Button variant="outline" size="sm">
                     <Eye className="mr-2 h-4 w-4" />
@@ -188,13 +225,13 @@ export default function OrdersPage() {
           <CardContent>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">総注文数</span>
+                <span className="text-muted-foreground text-sm">総注文数</span>
                 <span className="text-sm font-medium">{orders.length}件</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">処理待ち</span>
+                <span className="text-muted-foreground text-sm">処理待ち</span>
                 <span className="text-sm font-medium text-yellow-600">
-                  {orders.filter(o => o.status === 'PENDING').length}件
+                  {orders.filter((o) => o.status === 'PENDING').length}件
                 </span>
               </div>
             </div>
@@ -208,9 +245,14 @@ export default function OrdersPage() {
           <CardContent>
             <div className="space-y-2">
               <div>
-                <span className="text-sm text-muted-foreground">今日の売上</span>
+                <span className="text-muted-foreground text-sm">
+                  今日の売上
+                </span>
                 <p className="text-lg font-bold">
-                  ¥{orders.reduce((sum, order) => sum + order.billingAmount, 0).toLocaleString()}
+                  ¥
+                  {orders
+                    .reduce((sum, order) => sum + order.billingAmount, 0)
+                    .toLocaleString()}
                 </p>
               </div>
             </div>
@@ -224,15 +266,15 @@ export default function OrdersPage() {
           <CardContent>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">支払済み</span>
+                <span className="text-muted-foreground text-sm">支払済み</span>
                 <span className="text-sm font-medium text-green-600">
-                  {orders.filter(o => o.paymentStatus === 'PAID').length}件
+                  {orders.filter((o) => o.paymentStatus === 'PAID').length}件
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">未払い</span>
+                <span className="text-muted-foreground text-sm">未払い</span>
                 <span className="text-sm font-medium text-red-600">
-                  {orders.filter(o => o.paymentStatus === 'UNPAID').length}件
+                  {orders.filter((o) => o.paymentStatus === 'UNPAID').length}件
                 </span>
               </div>
             </div>
@@ -246,15 +288,15 @@ export default function OrdersPage() {
           <CardContent>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">確認済み</span>
+                <span className="text-muted-foreground text-sm">確認済み</span>
                 <span className="text-sm font-medium">
-                  {orders.filter(o => o.status === 'CONFIRMED').length}件
+                  {orders.filter((o) => o.status === 'CONFIRMED').length}件
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">保留中</span>
+                <span className="text-muted-foreground text-sm">保留中</span>
                 <span className="text-sm font-medium">
-                  {orders.filter(o => o.status === 'PENDING').length}件
+                  {orders.filter((o) => o.status === 'PENDING').length}件
                 </span>
               </div>
             </div>
