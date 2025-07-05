@@ -13,3 +13,17 @@ export class CreateSupplierDto {
   @IsString()
   phoneNumber: string;
 }
+
+export class UpdateSupplierDto {
+  @IsString()
+  code?: string;
+
+  @IsString()
+  name?: string;
+
+  @IsEmail()
+  email?: string;
+
+  @IsString()
+  phoneNumber?: string;
+}

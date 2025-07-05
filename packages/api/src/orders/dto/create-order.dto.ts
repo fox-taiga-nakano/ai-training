@@ -28,3 +28,18 @@ export class CreateShippingAddressDto {
   prefecture: string;
   addressLine: string;
 }
+
+export class UpdateOrderDto {
+  siteId?: number;
+  shopId?: number;
+  userId?: number;
+  totalAmount?: number;
+  shippingFee?: number;
+  discountAmount?: number;
+  billingAmount?: number;
+  paymentMethodId?: number;
+  deliveryMethodId?: number;
+  deliverySlotId?: number;
+  desiredArrivalDate?: Date;
+  memo?: string;
+}

@@ -2,14 +2,14 @@
 
 import { memo, useCallback } from 'react';
 
-import { Button } from '@repo/components/button';
+import { Button } from '@repo/ui/components/button';
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from '@repo/components/sheet';
+} from '@repo/ui/components/sheet';
 import { AlertTriangle, CheckCircle, Info, XCircle } from 'lucide-react';
 
 // アクションタイプの定義

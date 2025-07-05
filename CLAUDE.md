@@ -83,8 +83,9 @@ cd apps/web && pnpm test:watch
 ### 型チェック・品質チェック
 
 ```bash
-pnpm check-types    # TypeScript型チェック（Webアプリケーション）
-pnpm tsc            # 全プロジェクトの型チェック
+pnpm build          # ビルド時に型チェックが実行される
+cd apps/web && pnpm build  # Web アプリケーションの個別型チェック
+cd apps/api && pnpm build  # API アプリケーションの個別型チェック
 ```
 
 ### データベース操作
@@ -128,7 +129,7 @@ pnpm db:reset       # データベースリセット
 - コメントは日本語で記述
 - エラーメッセージも日本語対応
 
-### フォーム処理
+  ### フォーム処理
 
 - React Hook Form + Zod の組み合わせを使用
 - バリデーションスキーマは型安全に定義
@@ -490,11 +491,252 @@ pnpm db:seed      # 初期データ投入
 - `status`: OrderStatus
 - `changedAt`: DateTime
 
+## 画面作成ルール
+
+### 基本方針
+
+- **shadcn/ui**: 全てのUIコンポーネントは`@repo/ui`パッケージから使用
+- **レスポンシブ対応**: モバイルファースト設計
+- **アクセシビリティ**: ARIA属性・キーボードナビゲーション必須
+- **統一性**: 全画面で共通のUI・UXパターンを適用
+
+### 一覧画面実装パターン
+
+#### 基本構成
+
+- **レイアウト**: `Card`ベースのグリッド表示
+- **検索機能**: `Input`コンポーネント（リアルタイム検索）
+- **フィルター**: `Select`コンポーネント（カテゴリ・ステータス等）
+- **データテーブル**: `@tanstack/react-table`使用
+- **ページネーション**: `@repo/ui/components/pagination`
+- **ソート機能**: テーブルヘッダーでのクリックソート
+
+#### 必須機能
+
+- **新規作成ボタン**: 右上に配置（`Button`コンポーネント）
+- **アクションリンク**: 各行に詳細・編集・削除リンク
+- **ローディング状態**: `Skeleton`コンポーネント
+- **エラー状態**: `Alert`コンポーネント
+- **空状態**: 専用の空状態表示
+
+#### 実装例
+
+```tsx
+// 基本的な一覧画面の構成
+<Card>
+  <CardHeader>
+    <div className="flex items-center justify-between">
+      <div className="flex gap-2">
+        <Input placeholder="検索..." />
+        <Select>...</Select>
+      </div>
+      <Button>+ 新規作成</Button>
+    </div>
+  </CardHeader>
+  <CardContent>
+    <DataTable columns={columns} data={data} />
+    <Pagination />
+  </CardContent>
+</Card>
+```
+
+### 新規作成・編集画面実装パターン
+
+#### 基本構成
+
+- **モーダル**: `Dialog`コンポーネント使用
+- **フォーム**: `react-hook-form` + `zod`バリデーション
+- **フィールド**: `@repo/ui/components/form`でラップ
+- **ボタン**: 保存・キャンセル・削除（編集時）
+
+#### 必須機能
+
+- **バリデーション**: リアルタイム・サブミット時両方
+- **エラー表示**: フィールド単位のエラーメッセージ
+- **ローディング**: サブミット中のボタン無効化
+- **成功通知**: `toast`による成功メッセージ
+- **エラー通知**: `toast`によるエラーメッセージ
+
+#### 実装例
+
+```tsx
+// フォームの基本構成
+<Dialog>
+  <DialogContent>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>名前</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <DialogFooter>
+          <Button type="button" variant="outline" onClick={onCancel}>
+            キャンセル
+          </Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading && <Spinner />}
+            保存
+          </Button>
+        </DialogFooter>
+      </form>
+    </Form>
+  </DialogContent>
+</Dialog>
+```
+
+### 詳細画面実装パターン
+
+#### 基本構成
+
+- **モーダル**: `Sheet`コンポーネント（サイドスライド）
+- **レイアウト**: `Card`ベースの情報表示
+- **アクション**: 編集・削除・閉じるボタン
+
+#### 必須機能
+
+- **情報表示**: 関連データの階層表示
+- **アクションボタン**: 編集・削除の権限チェック
+- **ローディング**: `Skeleton`による待機表示
+- **エラー処理**: データ取得エラー時の表示
+
+#### 実装例
+
+```tsx
+// 詳細画面の基本構成
+<Sheet>
+  <SheetContent>
+    <SheetHeader>
+      <SheetTitle>詳細情報</SheetTitle>
+    </SheetHeader>
+    <div className="space-y-4">
+      <Card>
+        <CardContent>{/* 詳細情報の表示 */}</CardContent>
+      </Card>
+    </div>
+
+    <SheetFooter>
+      <Button variant="outline" onClick={onEdit}>
+        編集
+      </Button>
+      <Button variant="destructive" onClick={onDelete}>
+        削除
+      </Button>
+    </SheetFooter>
+  </SheetContent>
+</Sheet>
+```
+
+### 削除処理実装パターン
+
+#### 基本構成
+
+- **確認ダイアログ**: 既存の`ConfirmModal`コンポーネント使用
+- **アクション**: 削除・キャンセルボタン
+- **通知**: 成功・エラーメッセージ
+
+#### 必須機能
+
+- **確認メッセージ**: 削除対象の明確な表示
+- **詳細情報**: 削除による影響の説明
+- **二重削除防止**: 処理中のボタン無効化
+- **関連データ**: 削除影響の警告表示
+
+#### 実装例
+
+```tsx
+// 削除確認の基本構成
+const confirmDelete = useConfirmModal({
+  type: 'delete',
+  title: '削除確認',
+  description: `${item.name}を削除しますか？`,
+  details: '削除すると元に戻せません。',
+  onConfirm: async () => {
+    await deleteItem(item.id);
+    toast.success('削除しました');
+  },
+});
+```
+
+### 共通UI・UX要件
+
+#### メッセージ・通知
+
+- **成功メッセージ**: `toast.success()`（緑色）
+- **エラーメッセージ**: `toast.error()`（赤色）
+- **警告メッセージ**: `toast.warning()`（黄色）
+- **情報メッセージ**: `toast.info()`（青色）
+
+#### ローディング状態
+
+- **ページレベル**: `Skeleton`コンポーネント
+- **コンポーネントレベル**: `Progress`コンポーネント
+- **ボタンレベル**: ボタン内`Spinner`
+
+#### アクセシビリティ
+
+- **キーボードナビゲーション**: Tab・Enter・Escキー対応
+- **スクリーンリーダー**: 適切なaria-label設定
+- **フォーカス管理**: モーダル開閉時のフォーカス移動
+- **色覚対応**: 色だけに依存しない情報伝達
+
+#### レスポンシブ対応
+
+- **ブレークポイント**: Tailwind CSSの標準ブレークポイント
+- **モバイル**: 320px以上での表示対応
+- **タブレット**: 768px以上での最適化
+- **デスクトップ**: 1024px以上での最適化
+
+### 実装チェックリスト
+
+#### 一覧画面
+
+- [ ] データテーブルの実装
+- [ ] 検索・フィルター機能
+- [ ] ページネーション
+- [ ] ソート機能
+- [ ] 新規作成ボタン
+- [ ] アクションリンク（詳細・編集・削除）
+- [ ] ローディング・エラー・空状態
+
+#### フォーム画面
+
+- [ ] react-hook-form設定
+- [ ] zodバリデーション
+- [ ] フィールドエラー表示
+- [ ] サブミット処理
+- [ ] 成功・エラー通知
+- [ ] ローディング状態
+
+#### 詳細・削除
+
+- [ ] 詳細情報表示
+- [ ] 削除確認ダイアログ
+- [ ] アクションボタン
+- [ ] 権限チェック
+- [ ] 通知メッセージ
+
+#### 共通要件
+
+- [ ] レスポンシブ対応
+- [ ] アクセシビリティ対応
+- [ ] 一貫したUI・UX
+- [ ] エラーハンドリング
+- [ ] ローディング状態管理
+
 ## 注意事項
 
 - **Node.js要件**: 20以上必須
 - **パッケージマネージャー**: pnpm@10.12.4使用（npmやyarnは使用不可）
 - **Huskyプリコミットフック**: 有効化済み（`pnpm prepare`で初期化）
-- **型エラー**: 作業完了前に必ず解決（`pnpm check-types`で確認）
+- **型エラー**: 作業完了前に必ず解決（`pnpm build`で確認）
 - **ESLintエラー**: ignoreでの回避禁止、根本的解決必須
 - **データベース**: 開発時はDocker Composeを使用してPostgreSQL起動
