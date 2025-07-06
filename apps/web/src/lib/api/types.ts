@@ -69,9 +69,18 @@ export interface Product {
   code: string;
   name: string;
   categoryId: number;
-  category: string;
+  category: {
+    id: number;
+    name: string;
+  };
   supplierId: number;
-  supplier: string;
+  supplier: {
+    id: number;
+    code: string;
+    name: string;
+    email: string;
+    phoneNumber: string;
+  };
   retailPrice: number;
   purchasePrice: number;
   stock?: number;

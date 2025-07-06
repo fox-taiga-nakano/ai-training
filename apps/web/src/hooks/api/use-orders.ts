@@ -41,8 +41,8 @@ export function useOrders(params?: QueryParams, options?: ApiHookOptions) {
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 
@@ -73,8 +73,8 @@ export function useOrder(id: number, options?: ApiHookOptions) {
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 
@@ -221,8 +221,8 @@ export function useSearchOrders(searchTerm: string, options?: ApiHookOptions) {
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 
@@ -258,8 +258,8 @@ export function useOrdersByStatus(
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 
@@ -292,8 +292,8 @@ export function useCustomerOrders(userId: number, options?: ApiHookOptions) {
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 

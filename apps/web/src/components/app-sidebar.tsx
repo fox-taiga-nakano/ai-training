@@ -56,7 +56,7 @@ export const data = {
       url: '/',
       icon: SquareTerminal,
       isActive: true,
-      items: [],
+      // items: [],
     },
     {
       title: '商品管理',

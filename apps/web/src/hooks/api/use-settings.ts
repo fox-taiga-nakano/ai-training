@@ -157,8 +157,8 @@ export function useGeneralSettings(options?: ApiHookOptions) {
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 
@@ -228,8 +228,8 @@ export function useDeliveryMethods(
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 
@@ -353,8 +353,8 @@ export function usePaymentMethods(
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 

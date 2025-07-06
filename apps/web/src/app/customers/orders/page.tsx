@@ -536,15 +536,21 @@ export default function CustomerOrdersPage() {
         return false;
 
       // ステータス条件
-      if (filters.orderStatus && order.orderStatus !== filters.orderStatus)
+      if (
+        filters.orderStatus &&
+        filters.orderStatus !== 'all' &&
+        order.orderStatus !== filters.orderStatus
+      )
         return false;
       if (
         filters.paymentStatus &&
+        filters.paymentStatus !== 'all' &&
         order.paymentStatus !== filters.paymentStatus
       )
         return false;
       if (
         filters.paymentMethod &&
+        filters.paymentMethod !== 'all' &&
         order.paymentMethod !== filters.paymentMethod
       )
         return false;
@@ -709,7 +715,7 @@ export default function CustomerOrdersPage() {
                       <SelectValue placeholder="すべて" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">すべて</SelectItem>
+                      <SelectItem value="all">すべて</SelectItem>
                       <SelectItem value="PENDING">保留中</SelectItem>
                       <SelectItem value="CONFIRMED">確認済み</SelectItem>
                       <SelectItem value="SHIPPED">発送済み</SelectItem>
@@ -730,7 +736,7 @@ export default function CustomerOrdersPage() {
                       <SelectValue placeholder="すべて" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">すべて</SelectItem>
+                      <SelectItem value="all">すべて</SelectItem>
                       <SelectItem value="UNPAID">未払い</SelectItem>
                       <SelectItem value="AUTHORIZED">承認済み</SelectItem>
                       <SelectItem value="PAID">支払済み</SelectItem>
@@ -750,7 +756,7 @@ export default function CustomerOrdersPage() {
                       <SelectValue placeholder="すべて" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">すべて</SelectItem>
+                      <SelectItem value="all">すべて</SelectItem>
                       <SelectItem value="クレジットカード">
                         クレジットカード
                       </SelectItem>

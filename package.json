@@ -11,7 +11,7 @@
     "test": "turbo run test",
     "test:e2e": "turbo run test:e2e",
     "lint": "turbo run lint",
-    "format": "prettier --write '**/*.{css,scss,md,mdx,json,js,ts,tsx}'",
+    "format": "prettier --write '**/*.{css,scss,md,mdx,json,js,ts,tsx}' --ignore-path .gitignore",
     "db:generate": "turbo run db:generate",
     "db:push": "turbo run db:push",
     "db:migrate": "turbo run db:migrate",

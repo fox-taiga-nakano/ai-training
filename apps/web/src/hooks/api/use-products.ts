@@ -28,6 +28,7 @@ export function useProducts(params?: QueryParams, options?: ApiHookOptions) {
     data,
     error,
     isLoading,
+    isValidating,
     mutate: revalidate,
   } = useSWR(
     key,
@@ -42,19 +43,18 @@ export function useProducts(params?: QueryParams, options?: ApiHookOptions) {
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 
   return {
     products: data || [],
-    isLoading,
+    isLoading: isLoading || (!data && isValidating),
     error,
     revalidate,
   };
 }
-
 /**
  * 商品詳細取得フック
  */
@@ -76,8 +76,6 @@ export function useProduct(id: number, options?: ApiHookOptions) {
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
     }
   );
 
@@ -110,8 +108,6 @@ export function useCategories(options?: ApiHookOptions) {
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
     }
   );
 
@@ -144,8 +140,6 @@ export function useProductSuppliers(options?: ApiHookOptions) {
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
     }
   );
 
@@ -267,8 +261,6 @@ export function useSearchProducts(
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
     }
   );
 
@@ -307,8 +299,6 @@ export function useProductsByCategory(
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
     }
   );
 

@@ -279,13 +279,13 @@ export default function ReportsPage() {
   useEffect(() => {
     let filtered = reports;
 
-    if (typeFilter) {
+    if (typeFilter && typeFilter !== 'all') {
       filtered = filtered.filter((report) => report.type === typeFilter);
     }
-    if (statusFilter) {
+    if (statusFilter && statusFilter !== 'all') {
       filtered = filtered.filter((report) => report.status === statusFilter);
     }
-    if (categoryFilter) {
+    if (categoryFilter && categoryFilter !== 'all') {
       filtered = filtered.filter(
         (report) => report.category === categoryFilter
       );
@@ -663,7 +663,7 @@ export default function ReportsPage() {
                   <SelectValue placeholder="すべて" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">すべて</SelectItem>
+                  <SelectItem value="all">すべて</SelectItem>
                   <SelectItem value="SALES">売上</SelectItem>
                   <SelectItem value="INVENTORY">在庫</SelectItem>
                   <SelectItem value="CUSTOMER">顧客</SelectItem>
@@ -680,7 +680,7 @@ export default function ReportsPage() {
                   <SelectValue placeholder="すべて" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">すべて</SelectItem>
+                  <SelectItem value="all">すべて</SelectItem>
                   <SelectItem value="READY">生成可能</SelectItem>
                   <SelectItem value="GENERATING">生成中</SelectItem>
                   <SelectItem value="COMPLETED">完了</SelectItem>
@@ -696,7 +696,7 @@ export default function ReportsPage() {
                   <SelectValue placeholder="すべて" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">すべて</SelectItem>
+                  <SelectItem value="all">すべて</SelectItem>
                   <SelectItem value="STANDARD">標準</SelectItem>
                   <SelectItem value="CUSTOM">カスタム</SelectItem>
                   <SelectItem value="SCHEDULED">定期</SelectItem>

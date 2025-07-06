@@ -143,8 +143,8 @@ export function useSalesAnalytics(
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval ?? 300000, // 5分間隔でリフレッシュ
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 
@@ -185,8 +185,8 @@ export function useCustomerAnalytics(
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval ?? 300000,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 
@@ -225,8 +225,8 @@ export function useProductAnalytics(
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval ?? 300000,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 
@@ -290,8 +290,8 @@ export function useRealtimeStats(options?: ApiHookOptions) {
       revalidateOnFocus: options?.revalidateOnFocus ?? true,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval ?? 30000, // 30秒間隔
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 
@@ -338,8 +338,8 @@ export function useDashboardStats(
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval ?? 300000,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 

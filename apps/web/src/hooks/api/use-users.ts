@@ -40,8 +40,8 @@ export function useUsers(params?: QueryParams, options?: ApiHookOptions) {
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 
@@ -72,8 +72,8 @@ export function useUser(id: number, options?: ApiHookOptions) {
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 
@@ -187,8 +187,8 @@ export function useSearchUsers(searchTerm: string, options?: ApiHookOptions) {
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 
@@ -221,8 +221,8 @@ export function useUserOrders(userId: number, options?: ApiHookOptions) {
       revalidateOnFocus: options?.revalidateOnFocus ?? false,
       revalidateOnReconnect: options?.revalidateOnReconnect ?? true,
       refreshInterval: options?.refreshInterval,
-      onSuccess: options?.onSuccess,
-      onError: options?.onError,
+      // onSuccess: options?.onSuccess,
+      // onError: options?.onError,
     }
   );
 

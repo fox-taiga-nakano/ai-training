@@ -172,16 +172,17 @@ export default function ProductsPage() {
     {
       key: 'category',
       label: 'カテゴリ',
-      render: (value) => (
+      render: (_, row) => (
         <div className="flex items-center">
           <Tag className="text-muted-foreground mr-2 h-4 w-4" />
-          {value}
+          {row.category.name}
         </div>
       ),
     },
     {
       key: 'supplier',
       label: 'サプライヤー',
+      render: (_, row) => row.supplier.name,
     },
     {
       key: 'retailPrice',
@@ -294,8 +295,16 @@ export default function ProductsPage() {
           formatter: (value) => <span className="font-mono">{value}</span>,
         },
         { label: '商品名', key: 'name' },
-        { label: 'カテゴリ', key: 'category' },
-        { label: 'サプライヤー', key: 'supplier' },
+        {
+          label: 'カテゴリ',
+          key: 'category',
+          formatter: (_, row) => row?.category?.name || '不明',
+        },
+        {
+          label: 'サプライヤー',
+          key: 'supplier',
+          formatter: (_, row) => row?.supplier?.name || '不明',
+        },
         {
           label: '商品説明',
           key: 'description',

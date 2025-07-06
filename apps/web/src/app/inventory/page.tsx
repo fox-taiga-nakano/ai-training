@@ -12,12 +12,7 @@ import type {
 } from '@/types/management';
 import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@repo/ui/components/card';
+import { Card, CardContent } from '@repo/ui/components/card';
 import {
   Select,
   SelectContent,
@@ -334,11 +329,11 @@ export default function InventoryPage() {
   const applyFilters = () => {
     let filtered = inventory;
 
-    if (statusFilter) {
+    if (statusFilter && statusFilter !== 'all') {
       filtered = filtered.filter((item) => item.stockStatus === statusFilter);
     }
 
-    if (categoryFilter) {
+    if (categoryFilter && categoryFilter !== 'all') {
       filtered = filtered.filter(
         (item) => item.categoryName === categoryFilter
       );
@@ -687,7 +682,7 @@ export default function InventoryPage() {
               <SelectValue placeholder="在庫状況で絞り込み" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">すべて</SelectItem>
+              <SelectItem value="all">すべて</SelectItem>
               <SelectItem value="CRITICAL">在庫切れ危険</SelectItem>
               <SelectItem value="LOW">在庫不足</SelectItem>
               <SelectItem value="OUT_OF_STOCK">在庫切れ</SelectItem>
@@ -701,7 +696,7 @@ export default function InventoryPage() {
               <SelectValue placeholder="カテゴリで絞り込み" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">すべて</SelectItem>
+              <SelectItem value="all">すべて</SelectItem>
               {categories.map((category) => (
                 <SelectItem key={category} value={category}>
                   {category}
