@@ -14,25 +14,21 @@ NestJS API バックエンドと Next.js フロントエンドを含む Turborep
 
 ```bash
 # リポジトリをクローン
-git clone <repository-url>
+git clone https://github.com/fox-taiga-nakano/ai-training.git
 cd ai-training
 
 # 依存関係をインストール
 pnpm install
-
-# Husky プリコミットフックを初期化
-pnpm prepare
 ```
 
 ### 2. データベースの設定
 
 ```bash
-# PostgreSQL コンテナを起動
-docker-compose up -d
-
 # データベース環境変数の設定
 cp packages/database/.env.example packages/database/.env
-# packages/database/.env ファイルを編集してDATABASE_URLを設定
+
+# PostgreSQL コンテナを起動
+docker-compose up -d
 
 # Prisma Client を生成
 pnpm db:generate
@@ -49,13 +45,6 @@ pnpm db:seed
 ```bash
 # 全アプリケーションを同時起動
 pnpm dev
-
-# 個別起動の場合
-# API サーバー（ポート 3000）
-cd apps/api && pnpm dev
-
-# Web サーバー（ポート 3001）
-cd apps/web && pnpm dev
 ```
 
 ### 4. 動作確認
