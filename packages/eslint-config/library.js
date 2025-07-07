@@ -1,29 +1,32 @@
 const { resolve } = require('node:path');
+const baseConfig = require('./base.js');
+const onlyWarnPlugin = require('eslint-plugin-only-warn');
 
 const project = resolve(process.cwd(), 'tsconfig.json');
 
-/** @type {import("eslint").Linter.Config} */
-module.exports = {
-  extends: ['./base.js'],
-  plugins: ['only-warn'],
-  globals: {
-    React: true,
-    JSX: true,
-  },
-  env: {
-    node: true,
-  },
-  settings: {
-    'import/resolver': {
-      typescript: {
+/** @type {import("eslint").Linter.FlatConfig[]} */
+module.exports = [
+  ...baseConfig,
+  {
+    files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      globals: {
+        React: 'readonly',
+        JSX: 'readonly',
+      },
+      parserOptions: {
         project,
       },
     },
-  },
-  ignorePatterns: ['.*.js', 'node_modules/', 'dist/'],
-  overrides: [
-    {
-      files: ['*.js?(x)', '*.ts?(x)'],
+    plugins: {
+      'only-warn': onlyWarnPlugin,
     },
-  ],
-};
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project,
+        },
+      },
+    },
+  },
+];

@@ -1,4 +1,6 @@
 const { resolve } = require('node:path');
+const baseConfig = require('./base.js');
+const onlyWarnPlugin = require('eslint-plugin-only-warn');
 
 const project = resolve(process.cwd(), 'tsconfig.json');
 
@@ -7,28 +9,43 @@ const project = resolve(process.cwd(), 'tsconfig.json');
  * internal (bundled by their consumer) libraries
  * that utilize React.
  *
- * This config extends the Vercel Engineering Style Guide.
- * For more information, see https://github.com/vercel/style-guide
- *
- * @type {import("eslint").Linter.Config}
+ * @type {import("eslint").Linter.FlatConfig[]}
  */
-module.exports = {
-  extends: ['./base.js'],
-  plugins: ['only-warn'],
-  globals: {
-    React: true,
-    JSX: true,
-  },
-  env: {
-    browser: true,
-  },
-  settings: {
-    'import/resolver': {
-      typescript: {
+module.exports = [
+  ...baseConfig,
+  {
+    files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      globals: {
+        React: 'readonly',
+        JSX: 'readonly',
+        window: 'readonly',
+        document: 'readonly',
+        console: 'readonly',
+      },
+      parserOptions: {
         project,
+        ecmaFeatures: {
+          jsx: true,
+        },
       },
     },
+    plugins: {
+      'only-warn': onlyWarnPlugin,
+    },
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project,
+        },
+      },
+      react: {
+        version: 'detect',
+      },
+    },
+    rules: {
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+    },
   },
-  ignorePatterns: ['.*.js', 'node_modules/', 'dist/'],
-  overrides: [{ files: ['*.js?(x)', '*.ts?(x)'] }],
-};
+];

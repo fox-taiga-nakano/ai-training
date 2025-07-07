@@ -1,0 +1,314 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output = "../generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/**
+ * ---- Enum定義 ----
+ */
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  SHIPPED
+  COMPLETED
+  CANCELED
+}
+
+enum PaymentStatus {
+  UNPAID
+  AUTHORIZED
+  PAID
+  REFUNDED
+}
+
+enum DeliveryMethodType {
+  STANDARD
+  EXPRESS
+  COOL
+  MAIL
+}
+
+enum ShipmentStatus {
+  PREPARING
+  IN_TRANSIT
+  DELIVERED
+  RETURNED
+}
+
+enum ReceivingStatus {
+  PENDING
+  RECEIVED
+  INSPECTED
+}
+
+enum SiteStatus {
+  ACTIVE
+  INACTIVE
+}
+
+/**
+ * ---- マスターテーブル ----
+ */
+model Site {
+  id             Int             @id @default(autoincrement())
+  code           String          @unique
+  name           String
+  status         SiteStatus      @default(ACTIVE)
+  shops          Shop[]
+  orders         Order[]
+  shipments      Shipment[]
+  payments       PaymentInfo[]
+  purchaseOrders PurchaseOrder[]
+  receivings     Receiving[]
+
+  @@map("sites")
+}
+
+model Shop {
+  id        Int        @id @default(autoincrement())
+  name      String
+  code      String     @unique
+  siteId    Int        @map("site_id")
+  site      Site       @relation(fields: [siteId], references: [id])
+  orders    Order[]
+  shipments Shipment[]
+
+  @@map("shops")
+}
+
+model User {
+  id             Int             @id @default(autoincrement())
+  email          String          @unique
+  name           String
+  orders         Order[]
+  purchaseOrders PurchaseOrder[]
+
+  @@map("users")
+}
+
+model Product {
+  id            Int         @id @default(autoincrement())
+  code          String      @unique
+  name          String
+  categoryId    Int         @map("category_id")
+  supplierId    Int         @map("supplier_id")
+  retailPrice   Int         @map("retail_price")
+  purchasePrice Int         @map("purchase_price")
+  category      Category    @relation(fields: [categoryId], references: [id])
+  supplier      Supplier    @relation(fields: [supplierId], references: [id])
+  orderItems    OrderItem[]
+
+  @@map("products")
+}
+
+model Category {
+  id         Int         @id @default(autoincrement())
+  name       String
+  products   Product[]
+  orderItems OrderItem[]
+
+  @@map("categories")
+}
+
+model Supplier {
+  id             Int             @id @default(autoincrement())
+  code           String          @unique
+  name           String
+  email          String
+  phoneNumber    String          @map("phone_number")
+  products       Product[]
+  purchaseOrders PurchaseOrder[]
+  receivings     Receiving[]
+
+  @@map("suppliers")
+}
+
+model PaymentMethod {
+  id     Int     @id @default(autoincrement())
+  name   String
+  code   String  @unique
+  active Boolean @default(true)
+  orders Order[]
+
+  @@map("payment_methods")
+}
+
+model DeliveryMethod {
+  id            Int                @id @default(autoincrement())
+  name          String
+  code          String             @unique
+  type          DeliveryMethodType
+  deliverySlots DeliverySlot[]
+  orders        Order[]
+
+  @@map("delivery_methods")
+}
+
+model DeliverySlot {
+  id               Int            @id @default(autoincrement())
+  deliveryMethodId Int            @map("delivery_method_id")
+  name             String
+  code             String
+  deliveryMethod   DeliveryMethod @relation(fields: [deliveryMethodId], references: [id])
+  orders           Order[]
+  shipments        Shipment[]
+
+  @@map("delivery_slots")
+}
+
+model ShippingAddress {
+  id          Int        @id @default(autoincrement())
+  name        String
+  postalCode  String     @map("postal_code")
+  prefecture  String
+  addressLine String     @map("address_line")
+  shipments   Shipment[]
+
+  @@map("shipping_addresses")
+}
+
+/**
+ * ---- トランザクションテーブル ----
+ */
+model Order {
+  id                 Int         @id @default(autoincrement())
+  siteId             Int         @map("site_id")
+  shopId             Int         @map("shop_id")
+  userId             Int         @map("user_id")
+  orderNumber        String      @unique @map("order_number")
+  totalAmount        Decimal     @map("total_amount") @db.Decimal(12, 2)
+  shippingFee        Int         @map("shipping_fee")
+  discountAmount     Decimal     @map("discount_amount") @db.Decimal(12, 2)
+  billingAmount      Decimal     @map("billing_amount") @db.Decimal(12, 2)
+  paymentMethodId    Int         @map("payment_method_id")
+  deliveryMethodId   Int         @map("delivery_method_id")
+  deliverySlotId     Int?        @map("delivery_slot_id")
+  orderStatus        OrderStatus @default(PENDING) @map("order_status")
+  orderDate          DateTime    @map("order_date")
+  desiredArrivalDate DateTime?   @map("desired_arrival_date")
+  memo               String?
+  createdAt          DateTime    @default(now()) @map("created_at")
+  updatedAt          DateTime    @updatedAt @map("updated_at")
+
+  site           Site           @relation(fields: [siteId], references: [id])
+  shop           Shop           @relation(fields: [shopId], references: [id])
+  user           User           @relation(fields: [userId], references: [id])
+  paymentMethod  PaymentMethod  @relation(fields: [paymentMethodId], references: [id])
+  deliveryMethod DeliveryMethod @relation(fields: [deliveryMethodId], references: [id])
+  deliverySlot   DeliverySlot?  @relation(fields: [deliverySlotId], references: [id])
+
+  items          OrderItem[]
+  payments       PaymentInfo[]
+  shipments      Shipment[]
+  purchaseOrders PurchaseOrder[]
+  statusLogs     OrderStatusLog[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id          Int     @id @default(autoincrement())
+  orderId     Int     @map("order_id")
+  productId   Int     @map("product_id")
+  categoryId  Int     @map("category_id")
+  productCode String  @map("product_code")
+  productName String  @map("product_name")
+  quantity    Int
+  unitPrice   Decimal @map("unit_price") @db.Decimal(10, 2)
+  memo        String?
+
+  order    Order    @relation(fields: [orderId], references: [id])
+  product  Product  @relation(fields: [productId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@map("order_items")
+}
+
+model PaymentInfo {
+  id            Int           @id @default(autoincrement())
+  orderId       Int           @map("order_id")
+  siteId        Int           @map("site_id")
+  paymentStatus PaymentStatus @default(UNPAID) @map("payment_status")
+  paymentAmount Decimal       @map("payment_amount") @db.Decimal(12, 2)
+  paymentDate   DateTime?     @map("payment_date")
+  transactionId String?       @map("transaction_id")
+
+  order Order @relation(fields: [orderId], references: [id])
+  site  Site  @relation(fields: [siteId], references: [id])
+
+  @@map("payment_info")
+}
+
+model Shipment {
+  id             Int            @id @default(autoincrement())
+  orderId        Int            @map("order_id")
+  siteId         Int            @map("site_id")
+  shopId         Int            @map("shop_id")
+  addressId      Int            @map("address_id")
+  deliverySlotId Int?           @map("delivery_slot_id")
+  trackingNumber String?        @map("tracking_number")
+  shippedAt      DateTime?      @map("shipped_at")
+  shippingStatus ShipmentStatus @default(PREPARING) @map("shipping_status")
+
+  order        Order           @relation(fields: [orderId], references: [id])
+  site         Site            @relation(fields: [siteId], references: [id])
+  shop         Shop            @relation(fields: [shopId], references: [id])
+  address      ShippingAddress @relation(fields: [addressId], references: [id])
+  deliverySlot DeliverySlot?   @relation(fields: [deliverySlotId], references: [id])
+
+  @@map("shipments")
+}
+
+model PurchaseOrder {
+  id          Int      @id @default(autoincrement())
+  orderId     Int?     @map("order_id")
+  supplierId  Int      @map("supplier_id")
+  siteId      Int      @map("site_id")
+  purchaserId Int      @map("purchaser_id")
+  invoiceNo   String   @map("invoice_no")
+  orderDate   DateTime @map("order_date")
+  expectedAt  DateTime @map("expected_at")
+
+  order     Order?   @relation(fields: [orderId], references: [id])
+  supplier  Supplier @relation(fields: [supplierId], references: [id])
+  site      Site     @relation(fields: [siteId], references: [id])
+  purchaser User     @relation(fields: [purchaserId], references: [id])
+
+  receivings Receiving[]
+
+  @@map("purchase_orders")
+}
+
+model Receiving {
+  id              Int             @id @default(autoincrement())
+  purchaseOrderId Int             @map("purchase_order_id")
+  siteId          Int             @map("site_id")
+  supplierId      Int             @map("supplier_id")
+  receivedAt      DateTime        @map("received_at")
+  status          ReceivingStatus @default(PENDING)
+
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+  site          Site          @relation(fields: [siteId], references: [id])
+  supplier      Supplier      @relation(fields: [supplierId], references: [id])
+
+  @@map("receivings")
+}
+
+model OrderStatusLog {
+  id        Int         @id @default(autoincrement())
+  orderId   Int         @map("order_id")
+  status    OrderStatus
+  changedAt DateTime    @default(now()) @map("changed_at")
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@map("order_status_logs")
+}
