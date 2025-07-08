@@ -12,6 +12,7 @@
     "test:e2e": "turbo run test:e2e",
     "lint": "turbo run lint",
     "format": "prettier --write '**/*.{css,scss,md,mdx,json,js,ts,tsx}' --ignore-path .gitignore",
+    "db:init": "run-s db:generate db:push db:seed",
     "db:generate": "turbo run db:generate",
     "db:push": "turbo run db:push",
     "db:migrate": "turbo run db:migrate",
@@ -23,6 +24,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "npm-run-all2": "^8.0.4",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.13",
     "turbo": "^2.5.4"

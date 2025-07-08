@@ -24,20 +24,17 @@ pnpm install
 ### 2. データベースの設定
 
 ```bash
-# データベース環境変数の設定
+# Docker Desktop WSL2統合を有効化（重要）
+# Docker Desktop設定でWSL2統合を有効にしてください
+
+# 環境変数の設定
 cp packages/database/.env.example packages/database/.env
 
 # PostgreSQL コンテナを起動
-docker-compose up -d
+docker compose up -d
 
-# Prisma Client を生成
-pnpm db:generate
-
-# データベーススキーマを適用
-pnpm db:push
-
-# 初期データを投入
-pnpm db:seed
+# データベースの初期化
+pnpm db:init
 ```
 
 ### 3. 開発サーバーの起動
@@ -59,13 +56,11 @@ pnpm dev
 # コード品質チェック
 pnpm lint          # ESLint 実行
 pnpm format        # Prettier 実行
-pnpm check-types   # TypeScript 型チェック（Web）
-pnpm tsc           # 全プロジェクトの型チェック
+pnpm build         # 全プロジェクトのビルド（型チェック含む）
 
 # テスト実行
 pnpm test          # ユニットテスト
 pnpm test:e2e      # E2E テスト（Playwright）
-pnpm test:watch    # テスト監視モード
 
 # データベース操作
 pnpm db:studio     # Prisma Studio 起動
@@ -79,10 +74,10 @@ pnpm db:migrate    # マイグレーション実行（本番用）
 
 ```bash
 # Docker コンテナの状態確認
-docker-compose ps
+docker compose ps
 
 # コンテナを再起動
-docker-compose restart
+docker compose restart
 
 # 環境変数を確認
 cat packages/database/.env
@@ -91,9 +86,6 @@ cat packages/database/.env
 #### 型エラーやESLintエラー
 
 ```bash
-# 型チェック
-pnpm check-types
-
 # ESLint でエラー確認・修正
 pnpm lint --fix
 ```
