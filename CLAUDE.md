@@ -169,7 +169,7 @@ pnpm db:reset       # データベースリセット
 - ESLint で警告ゼロを維持（max-warnings 0）
 - パッケージ間の依存関係は workspace プロトコルを使用
 - Node.js 18以上が必要（推奨：Node.js 20+）
-- pnpm 10.12.4 を使用（npmやyarnは使用不可）
+- pnpm 10.13.1 を使用（npmやyarnは使用不可）
 
 ## Next.js 開発原則
 
@@ -735,7 +735,7 @@ const confirmDelete = useConfirmModal({
 ## 注意事項
 
 - **Node.js要件**: 20以上必須
-- **パッケージマネージャー**: pnpm@10.12.4使用（npmやyarnは使用不可）
+- **パッケージマネージャー**: pnpm@10.13.1使用（npmやyarnは使用不可）
 - **Huskyプリコミットフック**: 有効化済み（`pnpm prepare`で初期化）
 - **型エラー**: 作業完了前に必ず解決（`pnpm build`で確認）
 - **ESLintエラー**: ignoreでの回避禁止、根本的解決必須
