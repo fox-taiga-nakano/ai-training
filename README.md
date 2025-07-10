@@ -22,7 +22,7 @@ pnpm -v
 
 # 以下のような出力であれば `Y` を入力して下さい
 ! Corepack is about to download https://registry.npmjs.org/pnpm/-/pnpm-10.13.1.tgz
-? Do you want to continue? [Y/n]
+? Do you want to continue? [Y/n] Y
 
 # 依存関係をインストール
 pnpm install
@@ -53,6 +53,33 @@ pnpm dev
 - **フロントエンド**: http://localhost:3001
 - **API**: http://localhost:3000
 - **Prisma Studio**: `pnpm db:studio` でデータベース GUI を起動
+
+---
+
+## MCPを使用したテストデータ作成
+
+詳細なハンズオン手順については、[LESSON.md](LESSON.md) をご覧ください。
+
+### 概要
+
+このプロジェクトは、MCP（Model Context Protocol）PostgreSQL Serverを使用してテストデータを効率的に作成する学習教材です。
+複雑なリレーションを持つEC通販システムのデータベースに対して、MCPを活用してテストデータを挿入し、実際の開発現場で使えるスキルを身につけることができます。
+
+### 学習内容
+
+- MCP PostgreSQL Serverの導入と設定
+- データベース構造の理解（ER図作成）
+- 段階的なテストデータ作成（Phase 1〜4）
+- 大量データの効率的な作成手法
+- データ整合性の確認とベストプラクティス
+
+### 前提条件
+
+- PostgreSQL データベースが起動していること
+- MCP PostgreSQL Server がインストールされていること
+- Claude Code でMCP設定が完了していること
+
+---
 
 ### 5. 開発時のコマンド
 
@@ -223,28 +250,6 @@ pnpm lint --fix
 - Server Actions でサーバー処理を実装
 - バリデーションはクライアント・サーバー両方で実行
 - 秘密情報のログ出力・コミット禁止
-
-## MCP PostgreSQL Server を使用したテストデータ作成ハンズオン
-
-詳細なハンズオン手順については、[LESSON.md](LESSON.md) をご覧ください。
-
-### 概要
-
-このプロジェクトは、MCP（Model Context Protocol）PostgreSQL Serverを使用してテストデータを効率的に作成する学習教材です。複雑なリレーションを持つEC通販システムのデータベースに対して、MCPツールを使用してテストデータを挿入し、実際の開発現場で使えるスキルを身につけることができます。
-
-### 学習内容
-
-- MCP PostgreSQL Serverの導入と設定
-- データベース構造の理解（ER図作成）
-- 段階的なテストデータ作成（Phase 1〜4）
-- 大量データの効率的な作成手法
-- データ整合性の確認とベストプラクティス
-
-### 前提条件
-
-- PostgreSQL データベースが起動していること
-- MCP PostgreSQL Server がインストールされていること
-- Claude Code でMCP設定が完了していること
 
 ## 参考リンク
 
