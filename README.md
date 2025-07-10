@@ -7,7 +7,7 @@ NestJS API バックエンドと Next.js フロントエンドを含む Turborep
 ### 必要な環境
 
 - **Node.js**: 20 以上（推奨: Node.js 20+）
-- **pnpm**: 10.12.4（厳密にこのバージョンを使用）
+- **pnpm**: 10.13.1（厳密にこのバージョンを使用）
 - **Docker**: PostgreSQL データベース用
 
 ### 1. リポジトリのクローンと依存関係のインストール
@@ -17,6 +17,13 @@ NestJS API バックエンドと Next.js フロントエンドを含む Turborep
 git clone https://github.com/fox-taiga-nakano/ai-training.git
 cd ai-training
 
+# pnpmの確認
+pnpm -v
+
+# 以下のような出力であれば `Y` を入力して下さい
+! Corepack is about to download https://registry.npmjs.org/pnpm/-/pnpm-10.13.1.tgz
+? Do you want to continue? [Y/n] Y
+
 # 依存関係をインストール
 pnpm install
 ```
@@ -24,20 +31,14 @@ pnpm install
 ### 2. データベースの設定
 
 ```bash
-# データベース環境変数の設定
+# 環境変数の設定
 cp packages/database/.env.example packages/database/.env
 
 # PostgreSQL コンテナを起動
-docker-compose up -d
+docker compose up -d
 
-# Prisma Client を生成
-pnpm db:generate
-
-# データベーススキーマを適用
-pnpm db:push
-
-# 初期データを投入
-pnpm db:seed
+# データベースの初期化
+pnpm db:init
 ```
 
 ### 3. 開発サーバーの起動
@@ -53,19 +54,44 @@ pnpm dev
 - **API**: http://localhost:3000
 - **Prisma Studio**: `pnpm db:studio` でデータベース GUI を起動
 
+---
+
+## MCPを使用したテストデータ作成
+
+詳細なハンズオン手順については、[LESSON.md](LESSON.md) をご覧ください。
+
+### 概要
+
+このプロジェクトは、MCP（Model Context Protocol）PostgreSQL Serverを使用してテストデータを効率的に作成する学習教材です。
+複雑なリレーションを持つEC通販システムのデータベースに対して、MCPを活用してテストデータを挿入し、実際の開発現場で使えるスキルを身につけることができます。
+
+### 学習内容
+
+- MCP PostgreSQL Serverの導入と設定
+- データベース構造の理解（ER図作成）
+- 段階的なテストデータ作成（Phase 1〜4）
+- 大量データの効率的な作成手法
+- データ整合性の確認とベストプラクティス
+
+### 前提条件
+
+- PostgreSQL データベースが起動していること
+- MCP PostgreSQL Server がインストールされていること
+- Claude Code でMCP設定が完了していること
+
+---
+
 ### 5. 開発時のコマンド
 
 ```bash
 # コード品質チェック
 pnpm lint          # ESLint 実行
 pnpm format        # Prettier 実行
-pnpm check-types   # TypeScript 型チェック（Web）
-pnpm tsc           # 全プロジェクトの型チェック
+pnpm build         # 全プロジェクトのビルド（型チェック含む）
 
 # テスト実行
 pnpm test          # ユニットテスト
 pnpm test:e2e      # E2E テスト（Playwright）
-pnpm test:watch    # テスト監視モード
 
 # データベース操作
 pnpm db:studio     # Prisma Studio 起動
@@ -79,10 +105,10 @@ pnpm db:migrate    # マイグレーション実行（本番用）
 
 ```bash
 # Docker コンテナの状態確認
-docker-compose ps
+docker compose ps
 
 # コンテナを再起動
-docker-compose restart
+docker compose restart
 
 # 環境変数を確認
 cat packages/database/.env
@@ -91,9 +117,6 @@ cat packages/database/.env
 #### 型エラーやESLintエラー
 
 ```bash
-# 型チェック
-pnpm check-types
-
 # ESLint でエラー確認・修正
 pnpm lint --fix
 ```
@@ -205,97 +228,6 @@ pnpm lint --fix
 - **Playwright** - E2E テスト
 - **Husky** - Git フック管理
 
-## データベース構成
-
-### 主要テーブル
-
-#### Site（サイト）モデル
-
-- `id`: 一意識別子（自動増分）
-- `code`: サイトコード（ユニーク）
-- `name`: サイト名
-- `status`: ステータス（ACTIVE/INACTIVE）
-
-#### User（ユーザー）モデル
-
-- `id`: 一意識別子（自動増分）
-- `email`: メールアドレス（ユニーク）
-- `name`: ユーザー名
-
-#### Product（商品）モデル
-
-- `id`: 一意識別子（自動増分）
-- `code`: 商品コード（ユニーク）
-- `name`: 商品名
-- `categoryId`: カテゴリID
-- `supplierId`: サプライヤーID
-- `retailPrice`: 小売価格
-- `purchasePrice`: 仕入価格
-
-#### Order（注文）モデル
-
-- `id`: 一意識別子（自動増分）
-- `orderNumber`: 注文番号（ユニーク）
-- `totalAmount`: 合計金額
-- `shippingFee`: 送料
-- `orderStatus`: 注文ステータス（PENDING/CONFIRMED/SHIPPED/COMPLETED/CANCELED）
-- `orderDate`: 注文日
-- `desiredArrivalDate`: 希望到着日
-
-#### OrderItem（注文明細）モデル
-
-- `id`: 一意識別子（自動増分）
-- `orderId`: 注文ID
-- `productId`: 商品ID
-- `quantity`: 数量
-- `unitPrice`: 単価
-
-#### PaymentInfo（決済情報）モデル
-
-- `id`: 一意識別子（自動増分）
-- `orderId`: 注文ID
-- `paymentStatus`: 決済ステータス（UNPAID/AUTHORIZED/PAID/REFUNDED）
-- `paymentAmount`: 決済金額
-- `transactionId`: 取引ID
-
-#### Shipment（配送）モデル
-
-- `id`: 一意識別子（自動増分）
-- `orderId`: 注文ID
-- `trackingNumber`: 追跡番号
-- `shippingStatus`: 配送ステータス（PREPARING/IN_TRANSIT/DELIVERED/RETURNED）
-- `shippedAt`: 発送日時
-
-### 関連テーブル
-
-#### Category（カテゴリ）
-
-- 商品分類管理
-
-#### Supplier（サプライヤー）
-
-- 仕入先管理
-
-#### PaymentMethod（決済方法）
-
-- 決済手段管理
-
-#### DeliveryMethod（配送方法）
-
-- 配送手段管理
-
-#### ShippingAddress（配送先住所）
-
-- 配送先住所管理
-
-#### PurchaseOrder（発注）
-
-- 仕入発注管理
-
-#### Receiving（入荷）
-
-- 入荷管理
-
 ## 開発ガイドライン
 
 ### コード規約
@@ -326,3 +258,4 @@ pnpm lint --fix
 - [Prisma Documentation](https://www.prisma.io/docs)
 - [shadcn/ui Documentation](https://ui.shadcn.com/)
 - [TailwindCSS Documentation](https://tailwindcss.com/docs)
+- [MCP PostgreSQL Server](https://github.com/modelcontextprotocol/servers/tree/main/src/postgres)
