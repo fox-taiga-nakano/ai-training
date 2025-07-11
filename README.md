@@ -78,11 +78,6 @@ pnpm dev
 
 **総時間**: 約25分
 
-### 前提条件
-
-- PostgreSQL データベースが起動していること（上記環境構築手順を完了）
-- Github Copilot でMCP PostgreSQL Server設定が完了していること
-
 ### ハンズオン手順
 
 詳細なハンズオン手順については、[LESSON.md](LESSON.md) をご覧ください。
