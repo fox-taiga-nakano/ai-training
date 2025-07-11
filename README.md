@@ -36,6 +36,7 @@ pnpm install
 # 環境変数の設定
 cp packages/database/.env.example packages/database/.env
 
+# Docker Desktopを起動
 # PostgreSQL コンテナを起動
 docker compose up -d
 
