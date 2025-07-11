@@ -39,19 +39,21 @@ GitHub Copilotの設定ファイルに以下を追加してください：
 3. 以下の設定を追加します：
 ```json
 {
-  "servers": {
-    "postgres": {
-      "command": "npx",
+	"servers": {
+		"postgres": {
+			"type": "stdio",
+			"command": "npx",
       "args": ["-y", "mcp-postgres-server"],
-      "env": {
-        "PG_HOST": "localhost",
-        "PG_PORT": "6543",
-        "PG_USER": "postgres",
-        "PG_PASSWORD": "password",
-        "PG_DATABASE": "postgres"
-      }
-    }
-  }
+			"env": {
+				"PG_HOST": "localhost",
+				"PG_PORT": "6543",
+				"PG_USER": "postgres",
+				"PG_PASSWORD": "password",
+				"PG_DATABASE": "postgres"
+			}
+		}
+	},
+	"inputs": []
 }
 ```
 4. VSCodeを再起動して設定を反映します。（ウィンドウの再読み込みではなく、ウィンドウを完全に閉じてください）
